@@ -1,0 +1,225 @@
+(defvar vol_reveal false)
+(defpoll volume_percent :initial 100 :interval "0.1s" "amixer -D pulse sget Master | grep 'Left:' | awk -F'[][]' '{ print $2 }' | tr -d '%'" )
+(defpoll mic_percent :inital 100 :interval "0.1s" "amixer -D pulse sget Capture | grep 'Left:' | awk -F'[][]' '{ print $2 }' | tr -d '%'" )
+(defvar mic_reveal false)
+(defvar music_reveal false)
+(defvar wifi_reveal false)
+(defvar time_reveal false)
+(defvar vol_mute false)
+(defvar mic_mute false)
+(defvar tray_visible false)
+
+(defwindow bar
+  :monitor 0
+  :windowtype "dock"
+  :stacking "fg"
+  :hexpand false
+  :vexpand false
+  :geometry (geometry
+                      :width "100%"
+                      :height "3%"
+                      :anchor "top center")
+  :exclusive true
+  :space-evenly false
+  
+  (bar)
+)
+
+(defwindow tray
+  :monitor 0
+  :windowtype "dock"
+  :stacking "overlay"
+  :hexpand false
+  :vexpand false
+  :geometry (geometry
+                      :width "30%"
+                      :height "30%"
+                      :anchor "top right"
+                      :x 50)
+  :exclusive true
+  :space-evenly false
+  :focusable false
+  :visible tray_visible
+  :class "sys_tray"
+
+    (system_tray)
+)
+
+
+(defwidget bar []
+  (box    :orientation "h"
+                :class "bar_class"
+    (music)
+    (sidestuff))
+  
+)
+
+
+(defwidget sidestuff []
+    (box :class "sidestuff" :orientation "h" :space-evenly false :halign "end" :hexpand false :spacing 20
+        (volume)
+        (mic)
+        (system_tray)
+        (time)
+    )
+)
+
+(defwidget system_tray []
+    (box
+        ;; (button 
+        ;;     :onclick "${tray_visible ? "eww update tray_visible=false" : "eww update tray_visible=true"}; ./scripts/open-tray ${tray_visible ? 1 : 0}"
+        ;;     ""
+        ;; )
+        (systray :space-evenly true :spacing 12 :prepend-new true :icon-size 18
+                :visible "${tray_visible ? "true" : "false"}"
+        )
+    )
+)
+
+(deflisten workspaces :initial "[]" "bash ~/.config/eww/scripts/get-workspaces")
+(deflisten current_workspace :initial "1" "bash ~/.config/eww/scripts/get-active-workspace")
+(defwidget workspaces []
+  (eventbox :onscroll "bash ~/.config/eww/scripts/change-active-workspace {} ${current_workspace}" :class "workspaces-widget"
+    (box :space-evenly false
+         :spacing 0
+         :halign "center"
+      (label :text "${workspaces}${current_workspace}" :visible false)
+      (for workspace in workspaces
+        (eventbox :onclick "hyprctl dispatch workspace ${workspace.id}"
+          (box :class "workspace-entry ${workspace.windows > 0 ? "occupied" : "empty"}"
+            (label :text "" :class "workspace-entry ${workspace.id == current_workspace ? "current" : ""}" )
+            )
+          )
+        )
+      )
+    )
+ )
+
+(defwidget music []
+    (box 
+        :class "music"
+        :orientation "h"
+        :space-evenly false
+        :halign "start"
+
+        {music != "" ? "🎵${music}" : ""}
+    
+    )
+)
+
+
+(deflisten music :initial ""
+  "playerctl --follow metadata --format '{{ artist }} - {{ title }}' || true")
+
+; Revealer on hover, using children
+(defwidget revealer-on-hover [revealvar revealvar-name ?class ?duration ?transition]
+  (box
+    :class "${class} revealer-on-hover"
+    :orientation "h"
+    :space-evenly false
+    (eventbox
+      :onhover "eww update ${revealvar-name}=true"
+      :onhoverlost "eww update ${revealvar-name}=false"
+      (box
+        :space-evenly false
+        (children :nth 0)
+        (revealer
+          :reveal revealvar
+          :transition {transition ?: "slideright"}
+          :duration {duration ?: "500ms"}
+          (children :nth 1))))))
+
+
+
+(defpoll _time :interval "1s"
+  `date +'{"h":"%H", "m":"%M", "s":"%S"}'`)
+
+(defwidget time [] 
+    (label :text "${_time.h}:${_time.m}:${_time.s}"
+            :halign "center"
+            :hexpand false
+            :class "time"
+    )
+)
+
+
+(defwidget volume []
+    (revealer-on-hover-reversed
+        :revealvar vol_reveal
+        :revealvar-name "vol_reveal"
+        :transition "slideright"
+
+        (box
+            :space-evenly false
+            (scale    
+                :class "volbar"
+			    :value volume_percent
+			    :orientation "h"
+			    :tooltip "${volume_percent}%"
+			    :max 101
+			    :min 0
+                :onchange "amixer -D pulse sset Master {}%"
+		    )
+	    )
+	    (button :onclick "" :class "volume_icon" " ${volume_percent}%")
+    )
+)
+
+(defwidget mic []
+    (revealer-on-hover-reversed
+        :revealvar mic_reveal
+        :revealvar-name "mic_reveal"
+        :transition "slideleft"
+        (box
+            :space-evenly false
+            (scale    
+                :class "micbar"
+			    :value mic_percent
+			    :orientation "h"
+			    :tooltip "${mic_percent}%"
+			    :max 101
+			    :min 0
+                :onchange "amixer -D pulse sset Capture {}%"
+		    )
+	    )
+	    (button   :onclick ""   :class "mic_icon" " ${mic_percent}%")
+
+    )
+)
+
+; Revealer on hover, using children
+(defwidget revealer-on-hover [revealvar revealvar-name ?class ?duration ?transition]
+  (box
+    :class "${class} revealer-on-hover"
+    :orientation "h"
+    :space-evenly false
+    (eventbox
+      :onhover "eww update ${revealvar-name}=true"
+      :onhoverlost "eww update ${revealvar-name}=false"
+      (box
+        :space-evenly false
+        (children :nth 0)
+        (revealer
+          :reveal revealvar
+          :transition {transition ?: "slideright"}
+          :duration {duration ?: "500ms"}
+          (children :nth 1))))))
+
+(defwidget revealer-on-hover-reversed [revealvar revealvar-name ?class ?duration ?transition]
+  (box
+    :class "${class} revealer-on-hover"
+    :orientation "h"
+    :space-evenly false
+    (eventbox
+      :onhover "eww update ${revealvar-name}=true"
+      :onhoverlost "eww update ${revealvar-name}=false"
+      (box
+        :space-evenly false
+        (revealer
+          :reveal revealvar
+          :transition {transition ?: "slideright"}
+          :duration {duration ?: "500ms"}
+          (children :nth 0))
+        (children :nth 1)
+
+))))

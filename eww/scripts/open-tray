@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+if test "$1" == "1"
+then
+    eww open tray
+
+elif test "$1" == "0"
+then
+    eww close tray
+fi

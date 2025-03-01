@@ -1,0 +1,118 @@
+@import "../../.cache/wal/colors.scss";
+
+* {
+  all: unset;
+  font-family: JetBrains Mono Nerd Font;
+  color: $foreground;
+}
+
+// Global Styles
+.bar {
+  background-color: rgba(0, 0, 0, 0%);
+  padding-top: 8px;
+}
+
+.bar_class {
+  background-color: rgba(0, 0, 0, 0%);
+  border-radius: 20px;
+}
+
+.sys_tray {
+  background-color: rgba(255, 255, 255, 100%);
+  color: white;
+}
+
+.time {
+  margin-right: 20px;
+  /* background-color: rgba(20, 20, 20, 50%); */
+  /* border-radius: 16px; */
+  /* padding-left: 4px; */
+  /* padding-right: 4px; */
+}
+
+.music {
+  color: white;
+  background-color: rgba(20, 20, 20, 50%);
+  border-radius: 16px;
+  padding-left: 8px;
+  padding-right: 8px;
+  margin-left: 8px;
+}
+
+.volume_class {
+  color: #FFFFFF;
+}
+
+scale trough {
+  all: unset;
+  background-color: $color3;
+  border-radius: 50px;
+  min-height: 10px;
+  min-width: 100px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+scale trough highlight {
+  all: unset;
+  border-radius: 10px;
+  background-color: $color5;
+}
+
+.volume_icon {
+  font-size: 20;
+  color: $foreground;
+  margin-left: 10px;
+}
+
+.volbar {
+  margin-left: 10px;
+}
+
+.mic_icon {
+  font-size: 20;
+  color: $foreground;
+  margin-left: 10px;
+}
+
+
+// Styles on classes (see eww.yuck for more information)
+
+.sidestuff {
+  color: white;
+  background-color: rgba(0, 0, 0, 50%);
+  border-radius: 16px;
+  padding-right: 18px;
+}
+
+
+.workspace-entry {
+  all: unset;
+  border: none;
+  outline: none;
+  padding: 0px 8px;
+  border-radius: 50%;
+
+  &.occupied {
+    background-color: rgba($color11, 0.9);
+  }
+
+  &.occupied label {
+    color: $foreground;
+  }
+
+  &.empty {
+    background-color: rgba($color3, 0.2);
+  }
+
+  &.empty label {
+    color: rgba($color7, 0.7);
+  }
+
+  &.current {
+    margin-top: 8px;
+    margin-bottom: 8px;
+    background-color: $color1;
+    color: $color0;
+  }
+}
