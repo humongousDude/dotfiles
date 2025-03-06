@@ -1,7 +1,7 @@
-#!/usr/bin/env zsh
+#!/usr/bin/env bash
 
 # Set interval in minutes (default: 10 minutes)
-INTERVAL=${1:-10}
+INTERVAL=${1:-5}
 
 # Set the wallpaper directory
 WALLPAPER_DIR="$(xdg-user-dir PICTURES)/humongousdude.github.io/wallpapers/"

@@ -31,6 +31,7 @@ return {
                 if server_name == "rust_analyzer" then
                     goto continue
                 end
+
                 require("lspconfig")[server_name].setup({})
                 ::continue::
             end,

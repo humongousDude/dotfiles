@@ -1,11 +1,10 @@
 configuration {
     font: "JetBrainsMono Nerd Font 12";
 	location: 0;
-	yoffset: -285;
+	yoffset: 0;
 	xoffset: 0;
 
-fixed-num-lines: true;
-
+    fixed-num-lines: false;
     display-drun: "";
     display-run: "";
     display-window: "Windows: ";
@@ -13,16 +12,8 @@ fixed-num-lines: true;
 	drun-display-format: "{icon} {name} [<span weight='light' size='small'><i>({generic})</i></span>]";
 }
 
+
 * {
-    bg: rgba(0,0,0,0%);
-    bg-alt: rgba(0,0,0,0%); 
-
-    fg: rgba(0,0,0,0%);
-    fg-alt: rgba(0,0,0,0%);
-
-    background-color: @bg;
-    foreground: @fg;
-
     border: 0;
     margin: 0;
     padding: 0;
@@ -30,3 +21,12 @@ fixed-num-lines: true;
 }
 
 @theme "./current.rasi"
+
+window {
+    width: 25%;
+    height: 440px;
+}
+
+element-icon {
+    size: 3.65ch;
+}
