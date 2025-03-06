@@ -27,8 +27,6 @@ switch() {
 
     eww kill
     eww open bar
-
-    apply_gtk
 }
 
 if [ "$1" == "--noswitch" ]; then
@@ -38,18 +36,11 @@ elif [[ "$1" ]]; then
 else
 	# Select and set image (hyprland)
 
-    cd "$(xdg-user-dir PICTURES)/Wallpapers" || cd "$(xdg-user-dir PICTURES)" || return 1
+    cd "$(xdg-user-dir PICTURES)/humongousdude.github.io/wallpapers/" || cd "$(xdg-user-dir PICTURES)" || return 1
 	switch "$(yad --width 1200 --height 800 --file --add-preview --large-preview --title='Choose wallpaper')"
 fi
 
 apply_gtk() { # Using gradience-cli
-  usegradience=""
-  if [[ "$usegradience" = "nogradience" ]]; then
-    rm "$XDG_CONFIG_HOME/gtk-3.0/gtk.css"
-    rm "$XDG_CONFIG_HOME/gtk-4.0/gtk.css"
-    return
-  fi
-
   # Copy template
   mkdir -p "$CACHE_DIR"/user/generated/gradience
   cp "scripts/templates/gradience/preset.json" "$CACHE_DIR"/user/generated/gradience/preset.json
@@ -62,7 +53,6 @@ apply_gtk() { # Using gradience-cli
   mkdir -p "$XDG_CONFIG_HOME/presets" # create gradience presets folder
   # source $(eval echo $ILLOGICAL_IMPULSE_VIRTUAL_ENV)/bin/activate
   gradience-cli apply -p "$CACHE_DIR"/user/generated/gradience/preset.json --gtk both
-  deactivate
 
   # And set GTK theme manually as Gradience defaults to light adw-gtk3
   # (which is unreadable when broken when you use dark mode)

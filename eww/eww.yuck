@@ -49,16 +49,30 @@
 (defwidget bar []
     (box    :orientation "h"
                 :class "bar_class"
+        (leftstuff)
         (music)
-        (sidestuff)
-
+        (rightstuff)
     )
-  
+)
+
+(defwidget music []
+    (box 
+        :class "music"
+        :orientation "h"
+        :space-evenly false
+        :halign "center"
+
+        {music != "" ? "${music}" : ""}
+    )
+)
+
+(deflisten music :initial ""
+        "bash ~/.config/eww/scripts/get-player-metadata"
 )
 
 
-(defwidget sidestuff []
-    (box :class "sidestuff" :orientation "h" :space-evenly false :halign "end" :hexpand false :spacing 20
+(defwidget rightstuff []
+    (box :class "rightstuff" :orientation "h" :space-evenly false :halign "end" :hexpand false :spacing 20
         (volume)
         (mic)
         (system_tray)
@@ -66,9 +80,25 @@
     )
 )
 
+(defwidget leftstuff []
+    (box :class "leftstuff" :orientation "h" :space-evenly false :halign "start" :hexpand false :spacing 10
+        (label :text "󰣇" :class "icon")
+        (active_window)
+    )
+)
+
+(deflisten window :initial "..." "sh ~/.config/eww/scripts/get-window-title")
+(defwidget active_window [] 
+  (box
+        :class "active-window"
+    (label :text "${window}"
+    )
+  )
+)
+
 (defwidget system_tray []
     (box
-        ;; (button 
+        ;; (button
         ;;     :onclick "${tray_visible ? "eww update tray_visible=false" : "eww update tray_visible=true"}; ./scripts/open-tray ${tray_visible ? 1 : 0}"
         ;;     ""
         ;; )
@@ -113,21 +143,6 @@
   )
 )
 )
-(defwidget music []
-    (box 
-        :class "music"
-        :orientation "h"
-        :space-evenly false
-        :halign "start"
-
-        {music != "" ? "${music}" : ""}
-    
-    )
-)
-
-
-(deflisten music :initial ""
-  "playerctl --follow metadata --format '{{ artist }} - {{ title }}' || true")
 
 ; Revealer on hover, using children
 (defwidget revealer-on-hover [revealvar revealvar-name ?class ?duration ?transition]

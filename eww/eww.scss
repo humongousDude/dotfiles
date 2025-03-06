@@ -9,38 +9,25 @@
 // Global Styles
 .bar {
   background-color: rgba(0, 0, 0, 0%);
-  padding-top: 8px;
+  padding-top: 6px;
 }
 
 .bar_class {
   background-color: rgba(0, 0, 0, 0%);
-  border-radius: 20px;
 }
 
 .sys_tray {
   background-color: rgba(255, 255, 255, 100%);
-  color: white;
+  color: $foreground;
 }
 
 .time {
   margin-right: 20px;
-  /* background-color: rgba(20, 20, 20, 50%); */
-  /* border-radius: 16px; */
-  /* padding-left: 4px; */
-  /* padding-right: 4px; */
 }
 
-.music {
-  color: $foreground;
-  background-color: rgba(20, 20, 20, 50%);
-  border-radius: 16px;
-  padding-left: 8px;
-  padding-right: 8px;
-  margin-left: 8px;
-}
 
 .volume_class {
-  color: #FFFFFF;
+  color: $foreground;
 }
 
 scale trough {
@@ -55,12 +42,12 @@ scale trough {
 
 scale trough highlight {
   all: unset;
-  border-radius: 10px;
+  border-radius: 12px;
   background-color: $color5;
 }
 
 .volume_icon {
-  font-size: 20;
+  font-size: 20px;
   color: $foreground;
   margin-left: 10px;
 }
@@ -70,19 +57,45 @@ scale trough highlight {
 }
 
 .mic_icon {
-  font-size: 20;
   color: $foreground;
+  font-size: 20px;
   margin-left: 5px;
 }
 
+.leftstuff {
+  margin-left: 20px;
+}
 
-// Styles on classes (see eww.yuck for more information)
+.icon {
+  background-color: $background;
+  color: #1793d0;
+  font-size: 20px;
+  padding-right: 13px;
+  padding-left: 8px;
+  border-radius: 12px;
+}
 
-.sidestuff {
-  color: white;
-  background-color: rgba(0, 0, 0, 50%);
-  border-radius: 16px;
-  padding-right: 18px;
+.active-window {
+  background-color: $background;
+  margin-left: 0px;
+  padding-right: 8px;
+  padding-left: 8px;
+  border-radius: 12px;
+}
+
+.music {
+  color: $foreground;
+  background-color: $background;
+  border-radius: 12px;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.rightstuff {
+  color: $foreground;
+  background-color: $background;
+  border-radius: 12px;
+  margin-right: 20px;
 }
 
 .workspaces-widget {

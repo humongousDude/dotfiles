@@ -6,3 +6,4 @@ ln -s ~/dotfiles/rofi ~/.config/rofi
 ln -s ~/dotfiles/swaync ~/.config/swaync
 ln -s ~/dotfiles/kitty ~/.config/kitty
 ln -s ~/dotfiles/alacritty ~/.config/alacritty
+ln -s ~/dotfiles/.zshrc ~/.zshrc

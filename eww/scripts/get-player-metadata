@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# courtesity (how do you spell it) of shat gepeetie
+
+stdbuf -oL playerctl --follow metadata --format '{{ artist }} - {{ title }}' | awk '{ 
+    gsub(/^-\s*/, "", $0);  # Remove leading hyphen and space
+    if (length($0) > 40) 
+        print substr($0, 1, 37) "…"; 
+    else 
+        print $0;
+    fflush();  # Flush output immediately
+}'
