@@ -7,8 +7,7 @@ INTERVAL=${1:-15}
 WALLPAPER_DIR="$(xdg-user-dir PICTURES)/humongousdude.github.io/wallpapers/"
 [ -d "$WALLPAPER_DIR" ] || WALLPAPER_DIR="$(xdg-user-dir PICTURES)"
 
-# Function to switch wallpaper (rest of the script remains largely the same)
-
+# Function to switch wallpaper
 switch() {
     imgpath=$1
     read scale screenx screeny screensizey < <(hyprctl monitors -j | jq '.[] | select(.focused) | .scale, .x, .y, .height' | xargs)
@@ -29,15 +28,12 @@ switch() {
     wal -i "$imgpath"
     pywalfox update
 
-    if update_gtk_theme; then # Call update_gtk_theme and check for success
-        echo "GTK Colors updated successfully."
-    else
-        echo "Warning: GTK Color update failed. Check errors above."
-    fi
-
     eww kill
     eww open bar
 }
+
+# Initialize EWW timer variable to "N/A" at script start
+eww update wallpaper_timer_text="N/A"
 
 # Infinite loop to change wallpaper every X minutes
 while true; do
@@ -52,5 +48,12 @@ while true; do
     fi
 
     # Wait for the specified interval before changing again
-    sleep "${INTERVAL}m"
+    for (( i = INTERVAL * 60; i >= 0; i-- )); do # Loop in seconds for countdown
+        minutes=$((i / 60))
+        seconds=$((i % 60))
+        timer_text=$(printf "%02d:%02d" "$minutes" "$seconds")
+        eww update wallpaper_timer_text="$timer_text"
+        sleep 1 # Wait for 1 second
+    done
+
 done

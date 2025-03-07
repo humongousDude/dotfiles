@@ -8,6 +8,7 @@
 (defvar vol_mute false)
 (defvar mic_mute false)
 (defvar tray_visible false)
+(defvar wallpaper_timer_text "N/A")
 
 (defwindow bar
   :monitor 0
@@ -83,8 +84,14 @@
 (defwidget leftstuff []
     (box :class "leftstuff" :orientation "h" :space-evenly false :halign "start" :hexpand false :spacing 10
         (label :text "󰣇" :class "icon")
+        (time_until_wallpaper_swap)
         (active_window)
     )
+)
+
+
+(defwidget time_until_wallpaper_swap []
+    (label :text "${wallpaper_timer_text}" :class "wallpaper_timer")
 )
 
 (deflisten window :initial "..." "sh ~/.config/eww/scripts/get-window-title")
@@ -106,42 +113,6 @@
                 :visible "${tray_visible ? "true" : "false"}"
         )
     )
-)
-
-(deflisten workspaces :initial "[]" "bash ~/.config/eww/scripts/get-workspaces")
-(deflisten current_workspace :initial "1" "bash ~/.config/eww/scripts/get-active-workspace")
-(defwidget workspaces []
-  (eventbox
-    :onscroll "bash ~/.config/eww/scripts/change-active-workspace {} ${current_workspace}"
-    :class "workspaces-widget"
-    (box :space-evenly true
-         :spacing 0
-         :halign "center"
-         (label :text "${workspaces}${current_workspace}" :visible false)
-         ;; Iterate with index so that we can check left/right neighbors:
-         (for workspace in workspaces
-           (eventbox :onclick (str "hyprctl dispatch workspace " workspace.id)
-             (box :class (str "workspace-entry " 
-                               (if (> workspace.windows 0)
-                                 (if (and (> index 0)
-                                          (> (nth workspaces (- index 1)).windows 0))
-                                   (if (and (< index (- (length workspaces) 1))
-                                            (> (nth workspaces (+ index 1)).windows 0))
-                                       "occupied center"
-                                       "occupied left")
-                                   (if (and (< index (- (length workspaces) 1))
-                                            (> (nth workspaces (+ index 1)).windows 0))
-                                       "occupied right"
-                                       "occupied alone"))
-                                 "empty"))
-               (label :text "" 
-                      :class "${workspace.id == current_workspace ? "workspace-entry current" : "workspace-entry"}"
-             )
-           )
-         )
-    )
-  )
-)
 )
 
 ; Revealer on hover, using children

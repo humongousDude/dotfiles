@@ -44,7 +44,7 @@ scale trough {
   all: unset;
   // Suggestion:  $color3 is already used - if you like it, keep it! It's often a good accent.
   //             Alternatively, try another accent like $color2 (greenish/teal) or $color4 (blueish).
-  background-color: $color3;
+  background-color: $color2;
   border-radius: 50px;
   min-height: 10px;
   min-width: 100px;
@@ -57,7 +57,7 @@ scale trough highlight {
   border-radius: 12px;
   // Suggestion: $color5 is also used - magenta/purple. If you like the contrast with $color3, keep it.
   //             For a different highlight, try $color6 (cyan/light blue), or a brighter version of $color3 like $color11.
-  background-color: $color5;
+  background-color: $color6;
 }
 
 .volume_icon {
@@ -83,7 +83,7 @@ scale trough highlight {
 .icon {
   // Suggestion: Instead of hardcoded #1793d0 (blue), use a Pywal accent color.
   //             Let's try $color4 (often a blueish accent) or $color2 (greenish).
-  color: $color4;
+  color: $color6;
   /* Or try $color2, $color6, etc. for icons */
   background-color: $background;
   font-size: 20px;
@@ -92,6 +92,7 @@ scale trough highlight {
   border-radius: 12px;
 }
 
+.wallpaper_timer,
 .active-window {
   background-color: $background;
   margin-left: 0px;
@@ -114,6 +115,8 @@ scale trough highlight {
   border-radius: 12px;
   margin-right: 20px;
 }
+
+// unused, cba to add workspaces lol
 
 .workspaces-widget {
   // Suggestion: Darker background for workspace widget to make it stand out slightly.
