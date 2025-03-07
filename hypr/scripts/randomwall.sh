@@ -1,13 +1,14 @@
 #!/usr/bin/env bash
 
 # Set interval in minutes (default: 10 minutes)
-INTERVAL=${1:-5}
+INTERVAL=${1:-15}
 
 # Set the wallpaper directory
 WALLPAPER_DIR="$(xdg-user-dir PICTURES)/humongousdude.github.io/wallpapers/"
 [ -d "$WALLPAPER_DIR" ] || WALLPAPER_DIR="$(xdg-user-dir PICTURES)"
 
-# Function to switch wallpaper
+# Function to switch wallpaper (rest of the script remains largely the same)
+
 switch() {
     imgpath=$1
     read scale screenx screeny screensizey < <(hyprctl monitors -j | jq '.[] | select(.focused) | .scale, .x, .y, .height' | xargs)
@@ -27,6 +28,12 @@ switch() {
     # Update pywal and EWW
     wal -i "$imgpath"
     pywalfox update
+
+    if update_gtk_theme; then # Call update_gtk_theme and check for success
+        echo "GTK Colors updated successfully."
+    else
+        echo "Warning: GTK Color update failed. Check errors above."
+    fi
 
     eww kill
     eww open bar

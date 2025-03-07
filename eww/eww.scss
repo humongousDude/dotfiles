@@ -1,23 +1,34 @@
 @import "../../.cache/wal/colors.scss";
 
+// im artistically subliterate, so i had gemini pick the colors.
+
 * {
   all: unset;
   font-family: JetBrains Mono Nerd Font;
+  // Suggestion: Keep $foreground here - it's usually a good general text color.
   color: $foreground;
 }
 
 // Global Styles
 .bar {
-  background-color: rgba(0, 0, 0, 0%);
+  // Suggestion: Use $background - it's designed as a base background color from your wallpaper.
+  background-color: rgba($background, 0.0);
+  /* Keep transparency if you like it */
   padding-top: 6px;
 }
 
 .bar_class {
-  background-color: rgba(0, 0, 0, 0%);
+  // Suggestion:  Consistent background - use $background again.
+  background-color: rgba($background, 0.0);
+  /* Keep transparency */
 }
 
 .sys_tray {
-  background-color: rgba(255, 255, 255, 100%);
+  // Suggestion:  Slightly different background for system tray to visually separate it.
+  //             Perhaps a slightly lighter shade of the background, or a very subtle accent.
+  //             Let's try $color0 blended with white for a slightly lighter muted background.
+  background-color: rgba(mix($color0, white, 10%), 1.0);
+  /* Subtle lighter background */
   color: $foreground;
 }
 
@@ -25,13 +36,14 @@
   margin-right: 20px;
 }
 
-
 .volume_class {
   color: $foreground;
 }
 
 scale trough {
   all: unset;
+  // Suggestion:  $color3 is already used - if you like it, keep it! It's often a good accent.
+  //             Alternatively, try another accent like $color2 (greenish/teal) or $color4 (blueish).
   background-color: $color3;
   border-radius: 50px;
   min-height: 10px;
@@ -43,6 +55,8 @@ scale trough {
 scale trough highlight {
   all: unset;
   border-radius: 12px;
+  // Suggestion: $color5 is also used - magenta/purple. If you like the contrast with $color3, keep it.
+  //             For a different highlight, try $color6 (cyan/light blue), or a brighter version of $color3 like $color11.
   background-color: $color5;
 }
 
@@ -67,8 +81,11 @@ scale trough highlight {
 }
 
 .icon {
+  // Suggestion: Instead of hardcoded #1793d0 (blue), use a Pywal accent color.
+  //             Let's try $color4 (often a blueish accent) or $color2 (greenish).
+  color: $color4;
+  /* Or try $color2, $color6, etc. for icons */
   background-color: $background;
-  color: #1793d0;
   font-size: 20px;
   padding-right: 13px;
   padding-left: 8px;
@@ -99,13 +116,17 @@ scale trough highlight {
 }
 
 .workspaces-widget {
-  background-color: rgba(0, 0, 0, 100%);
+  // Suggestion: Darker background for workspace widget to make it stand out slightly.
+  //             Use a darker shade of $background, like $color0 itself or even $color8 (darker variant).
+  background-color: rgba($color0, 1.0);
+  /* Or try rgba($color8, 1.0) for even darker */
 }
 
 .workspace-entry {
   padding: 0px 8px;
 
   &.occupied-right {
+    // Suggestion: $color10 (green/teal) for occupied - often a good indicator of "active/in use".
     background-color: rgba($color10, 0.9);
     border-radius: 0px;
   }
@@ -125,17 +146,23 @@ scale trough highlight {
   }
 
   &.empty {
+    // Suggestion:  $color3 (yellow/gold) for empty - often associated with "warning" or "attention" subtly.
+    //             Alternatively, you could use a muted shade of your foreground like rgba($foreground, 0.5)
     background-color: rgba($color3, 0.2);
   }
 
   &.empty label {
-    color: rgba($color7, 0.7);
+    // Suggestion: Lighter shade of foreground for empty workspace text.
+    color: rgba($foreground, 0.7);
   }
 
   &.current {
     margin-top: 8px;
     margin-bottom: 8px;
+    // Suggestion: $color1 (reddish) for current workspace - red often signifies "active/selected".
     background-color: $color1;
-    color: $color0;
+    // Suggestion:  Use $foreground (or $color7) for text on the current workspace background for contrast.
+    color: $foreground;
+    /* Or try $color7 */
   }
 }
