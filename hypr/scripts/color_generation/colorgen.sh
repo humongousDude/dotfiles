@@ -61,7 +61,7 @@ elif [ "$backend" = "material" ]; then
     if [ "$3" = "--smart" ]; then
         smartflag='--smart'
     fi
-    # source ~/.config/hypr/scripts/venv/bin/activate
+    source ../venv/bin/activate
     python color_generation/generate_colors_material.py --path "$(eval echo $1)" \
     --mode "$lightdark" --scheme "$materialscheme" --transparency "$transparency" \
     --cache "$STATE_DIR/user/color.txt" $smartflag \

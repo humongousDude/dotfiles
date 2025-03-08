@@ -1,11 +1,19 @@
 #!/usr/bin/env bash
 
+XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
+XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
+XDG_STATE_HOME="${XDG_STATE_HOME:-$HOME/.local/state}"
+CONFIG_DIR="$XDG_CONFIG_HOME/hypr"  # Custom config directory
+CACHE_DIR="$XDG_CACHE_HOME/wallpaper-theming"    # Custom cache directory
+STATE_DIR="$XDG_STATE_HOME/wallpaper-theming"    # Custom state directory
+
 # Set interval in minutes (default: 10 minutes)
 INTERVAL=${1:-15}
 
 # Set the wallpaper directory
 WALLPAPER_DIR="$(xdg-user-dir PICTURES)/humongousdude.github.io/wallpapers/"
 [ -d "$WALLPAPER_DIR" ] || WALLPAPER_DIR="$(xdg-user-dir PICTURES)"
+
 
 update_gtk_theme() {
     # Ensure necessary directories exist
@@ -39,7 +47,7 @@ update_gtk_theme() {
             sed -i "s/{{ ${colorlist[$i]} }}/${colorvalues[$i]}/g" "$CACHE_DIR"/user/generated/gradience/preset.json
         done
 
-        source ./venv/bin/activate
+        # source ./venv/bin/activate
         if ! gradience-cli apply -p "$CACHE_DIR"/user/generated/gradience/preset.json --gtk both; then
             echo "Error: gradience-cli apply failed."
             deactivate
@@ -73,16 +81,18 @@ switch() {
 
     [ -z "$imgpath" ] && echo "No image found, aborting." && exit 1
 
-    # Apply wallpaper with smooth transition
     swww img "$imgpath" --transition-step 100 --transition-fps 120 \
         --transition-type grow --transition-angle 30 --transition-duration 1 \
         --transition-pos "$cursorposx, $cursorposy_inverted"
 
-    # Update pywal and EWW
     wal -i "$imgpath"
     pywalfox update
 
-    update_gtk_theme
+    if update_gtk_theme "$imgpath"; then # Pass wallpaper path to update_gtk_theme
+        echo "GTK Theme colors updated successfully using AGS scripts and Gradience."
+    else
+        echo "Warning: GTK Theme color update failed (AGS/Gradience method). Check errors above."
+    fi
 
     eww reload
 }

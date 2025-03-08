@@ -77,7 +77,6 @@ switch() {
         --transition-type grow --transition-angle 30 --transition-duration 1 \
         --transition-pos "$cursorposx, $cursorposy_inverted"
 
-    # Generate colors and apply them to GTK & system
     wal -i "$imgpath"
     pywalfox update
 
