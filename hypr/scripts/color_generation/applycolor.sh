@@ -8,8 +8,7 @@ CACHE_DIR="$XDG_CACHE_HOME/wallpaper-theming"    # Custom cache directory
 STATE_DIR="$XDG_STATE_HOME/wallpaper-theming"    # Custom state directory
 
 # Ensure custom directories exist
-mkdir -p "$CONFIG_DIR"
-mkdir -p "$CACHE_DIR"
+mkdir -p "$CONFIG_DIR" mkdir -p "$CACHE_DIR"
 mkdir -p "$STATE_DIR"
 mkdir -p "$CONFIG_DIR/scripts/color_generation" # Ensure subdirectories too, if needed
 mkdir -p "$CONFIG_DIR/scripts/templates/gradience"
@@ -85,22 +84,15 @@ apply_term() {
   done
 }
 
-# apply_hyprland() {
-#   # Check if scripts/templates/hypr/hyprland/colors.conf exists
-#   if [ ! -f "scripts/templates/hypr/hyprland/colors.conf" ]; then
-#     echo "Template file not found for Hyprland colors. Skipping that."
-#     return
-#   fi
-#   # Copy template
-#   mkdir -p "$CACHE_DIR"/user/generated/hypr/hyprland
-#   cp "scripts/templates/hypr/hyprland/colors.conf" "$CACHE_DIR"/user/generated/hypr/hyprland/colors.conf
-#   # Apply colors
-#   for i in "${!colorlist[@]}"; do
-#     sed -i "s/{{ ${colorlist[$i]} }}/${colorvalues[$i]#\#}/g" "$CACHE_DIR"/user/generated/hypr/hyprland/colors.conf
-#   done
-#
-#   cp "$CACHE_DIR"/user/generated/hypr/hyprland/colors.conf "$XDG_CONFIG_HOME"/hypr/hyprland/colors.conf
-# }
+apply_hyprland() {
+    rm "$CONFIG_DIR/hyprland/colors.conf"
+    cp "$CONFIG_DIR/scripts/templates/hypr/colors.conf" "$CONFIG_DIR/hyprland/"
+     
+  # Apply colors
+  for i in "${!colorlist[@]}"; do
+      sed -i "s/{{ ${colorlist[$i]} }}/${colorvalues[$i]#\#}/g" "$CONFIG_DIR"/hyprland/colors.conf
+      done
+}
 #
 # apply_hyprlock() {
 #   # Check if scripts/templates/hypr/hyprlock.conf exists
@@ -160,10 +152,13 @@ IFS=$'\n'
 colorlist=($colornames)     # Array of color names
 colorvalues=($colorstrings) # Array of color values
 
-# apply_hyprland &
+echo "$STATE_DIR/scss/_material.scss"
+
+
+apply_hyprland &
 # apply_hyprlock &
 apply_lightdark &
-apply_gtk &
+# apply_gtk &
 apply_qt &
 apply_fuzzel &
 apply_term &

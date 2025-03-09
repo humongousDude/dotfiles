@@ -1,12 +1,16 @@
 #!/usr/bin/env bash
 
-
 XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
 XDG_STATE_HOME="${XDG_STATE_HOME:-$HOME/.local/state}"
 CONFIG_DIR="$XDG_CONFIG_HOME/hypr"  # Custom config directory
 CACHE_DIR="$XDG_CACHE_HOME/wallpaper-theming"    # Custom cache directory
 STATE_DIR="$XDG_STATE_HOME/wallpaper-theming"    # Custom state directory
+
+apply_themes() {
+    update_gtk_theme "$imgpath"
+    update_hyprland_theme "$imgpath"
+}
 
 update_gtk_theme() {
     # Ensure necessary directories exist
@@ -29,6 +33,7 @@ update_gtk_theme() {
     colorlist=($colornames)     # Array of color names
     colorvalues=($colorstrings) # Array of color values
 
+
     # --- Apply GTK Function (from applycolor.sh, adapted) ---
     apply_gtk_internal() { # Renamed to avoid conflict if you still have original applycolor.sh sourced
         # Copy template
@@ -40,7 +45,7 @@ update_gtk_theme() {
             sed -i "s/{{ ${colorlist[$i]} }}/${colorvalues[$i]}/g" "$CACHE_DIR"/user/generated/gradience/preset.json
         done
 
-        source ./venv/bin/activate
+        # source ./venv/bin/activate
         if ! gradience-cli apply -p "$CACHE_DIR"/user/generated/gradience/preset.json --gtk both; then
             echo "Error: gradience-cli apply failed."
             deactivate
@@ -62,6 +67,15 @@ update_gtk_theme() {
     fi
 }
 
+update_hyprland_theme() {
+    # Apply Hyprland
+    cp "$CONFIG_DIR/scripts/templates/hypr/colors.conf" "$CONFIG_DIR/hyprland/"
+
+    for i in "${!colorlist[@]}"; do
+        sed -i "s/{{ ${colorlist[$i]} }}/${colorvalues[$i]#\#}/g" "$CONFIG_DIR"/hyprland/colors.conf
+        done
+}
+
 switch() {
     imgpath=$1
     read scale screenx screeny screensizey < <(hyprctl monitors -j | jq '.[] | select(.focused) | .scale, .x, .y, .height' | xargs)
@@ -80,7 +94,7 @@ switch() {
     wal -i "$imgpath"
     pywalfox update
 
-    if update_gtk_theme "$imgpath"; then # Pass wallpaper path to update_gtk_theme
+    if apply_themes "$imgpath"; then # Pass wallpaper path to update_gtk_theme
         echo "GTK Theme colors updated successfully using AGS scripts and Gradience."
     else
         echo "Warning: GTK Theme color update failed (AGS/Gradience method). Check errors above."

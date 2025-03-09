@@ -15,6 +15,11 @@ WALLPAPER_DIR="$(xdg-user-dir PICTURES)/humongousdude.github.io/wallpapers/"
 [ -d "$WALLPAPER_DIR" ] || WALLPAPER_DIR="$(xdg-user-dir PICTURES)"
 
 
+apply_themes() {
+    update_gtk_theme "$imgpath"
+    update_hyprland_theme "$imgpath"
+}
+
 update_gtk_theme() {
     # Ensure necessary directories exist
     mkdir -p "$CACHE_DIR"/user/generated
@@ -35,6 +40,7 @@ update_gtk_theme() {
     IFS=$'\n'
     colorlist=($colornames)     # Array of color names
     colorvalues=($colorstrings) # Array of color values
+
 
     # --- Apply GTK Function (from applycolor.sh, adapted) ---
     apply_gtk_internal() { # Renamed to avoid conflict if you still have original applycolor.sh sourced
@@ -69,26 +75,29 @@ update_gtk_theme() {
     fi
 }
 
+update_hyprland_theme() {
+    # Apply Hyprland
+    cp "$CONFIG_DIR/scripts/templates/hypr/colors.conf" "$CONFIG_DIR/hyprland/"
+
+    for i in "${!colorlist[@]}"; do
+        sed -i "s/{{ ${colorlist[$i]} }}/${colorvalues[$i]#\#}/g" "$CONFIG_DIR"/hyprland/colors.conf
+        done
+}
+
 # Function to switch wallpaper
 switch() {
     imgpath=$1
-    read scale screenx screeny screensizey < <(hyprctl monitors -j | jq '.[] | select(.focused) | .scale, .x, .y, .height' | xargs)
-    cursorposx=$(hyprctl cursorpos -j | jq '.x' 2>/dev/null) || cursorposx=960
-    cursorposx=$(bc <<< "scale=0; ($cursorposx - $screenx) * $scale / 1")
-    cursorposy=$(hyprctl cursorpos -j | jq '.y' 2>/dev/null) || cursorposy=540
-    cursorposy=$(bc <<< "scale=0; ($cursorposy - $screeny) * $scale / 1")
-    cursorposy_inverted=$((screensizey - cursorposy))
 
     [ -z "$imgpath" ] && echo "No image found, aborting." && exit 1
 
     swww img "$imgpath" --transition-step 100 --transition-fps 120 \
         --transition-type grow --transition-angle 30 --transition-duration 1 \
-        --transition-pos "$cursorposx, $cursorposy_inverted"
+        --transition-pos "960, 540"
 
     wal -i "$imgpath"
     pywalfox update
 
-    if update_gtk_theme "$imgpath"; then # Pass wallpaper path to update_gtk_theme
+    if apply_themes "$imgpath"; then # Pass wallpaper path to update_gtk_theme
         echo "GTK Theme colors updated successfully using AGS scripts and Gradience."
     else
         echo "Warning: GTK Theme color update failed (AGS/Gradience method). Check errors above."
