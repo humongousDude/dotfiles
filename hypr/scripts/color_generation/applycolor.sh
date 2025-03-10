@@ -7,158 +7,98 @@ CONFIG_DIR="$XDG_CONFIG_HOME/hypr"  # Custom config directory
 CACHE_DIR="$XDG_CACHE_HOME/wallpaper-theming"    # Custom cache directory
 STATE_DIR="$XDG_STATE_HOME/wallpaper-theming"    # Custom state directory
 
-# Ensure custom directories exist
-mkdir -p "$CONFIG_DIR" mkdir -p "$CACHE_DIR"
-mkdir -p "$STATE_DIR"
-mkdir -p "$CONFIG_DIR/scripts/color_generation" # Ensure subdirectories too, if needed
-mkdir -p "$CONFIG_DIR/scripts/templates/gradience"
+update_gtk_theme() {
+    # Ensure necessary directories exist
+    mkdir -p "$CACHE_DIR"/user/generated
+    mkdir -p "$STATE_DIR/scss"
+    mkdir -p "$XDG_CONFIG_HOME/presets" # for gradience
 
-term_alpha=100 #Set this to < 100 make all your terminals transparent
-# sleep 0 # idk i wanted some delay or colors dont get applied properly
-if [ ! -d "$CACHE_DIR"/user/generated ]; then
-  mkdir -p "$CACHE_DIR"/user/generated
-fi
-cd "$CONFIG_DIR" || exit
+    # Generate colors using colorgen.sh with pywal backend
+    echo "IMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA $1"
+    "$CONFIG_DIR"/scripts/color_generation/colorgen.sh "$1" --apply  # Pass wallpaper path and --apply
 
-colornames=''
-colorstrings=''
-colorlist=()
-colorvalues=()
-
-# wallpath=$(swww query | head -1 | awk -F 'image: ' '{print $2}')
-# wallpath_png="$CACHE_DIR/user/generated/hypr/lockscreen.png"
-# convert "$wallpath" "$wallpath_png"
-# wallpath_png=$(echo "$wallpath_png" | sed 's/\//\\\//g')
-# wallpath_png=$(sed 's/\//\\\\\//g' <<< "$wallpath_png")
-
-transparentize() {
-  local hex="$1"
-  local alpha="$2"
-  local red green blue
-
-  red=$((16#${hex:1:2}))
-  green=$((16#${hex:3:2}))
-  blue=$((16#${hex:5:2}))
-
-  printf 'rgba(%d, %d, %d, %.2f)\n' "$red" "$green" "$blue" "$alpha"
-}
-
-
-apply_fuzzel() {
-  # Check if scripts/templates/fuzzel/fuzzel.ini exists
-  if [ ! -f "scripts/templates/fuzzel/fuzzel.ini" ]; then
-    echo "Template file not found for Fuzzel. Skipping that."
-    return
-  fi
-  # Copy template
-  mkdir -p "$CACHE_DIR"/user/generated/fuzzel
-  cp "scripts/templates/fuzzel/fuzzel.ini" "$CACHE_DIR"/user/generated/fuzzel/fuzzel.ini
-  # Apply colors
-  for i in "${!colorlist[@]}"; do
-    sed -i "s/{{ ${colorlist[$i]} }}/${colorvalues[$i]#\#}/g" "$CACHE_DIR"/user/generated/fuzzel/fuzzel.ini
-  done
-
-  cp "$CACHE_DIR"/user/generated/fuzzel/fuzzel.ini "$XDG_CONFIG_HOME"/fuzzel/fuzzel.ini
-}
-
-apply_term() {
-  # Check if terminal escape sequence template exists
-  if [ ! -f "scripts/templates/terminal/sequences.txt" ]; then
-    echo "Template file not found for Terminal. Skipping that."
-    return
-  fi
-  # Copy template
-  mkdir -p "$CACHE_DIR"/user/generated/terminal
-  cp "scripts/templates/terminal/sequences.txt" "$CACHE_DIR"/user/generated/terminal/sequences.txt
-  # Apply colors
-  for i in "${!colorlist[@]}"; do
-    sed -i "s/${colorlist[$i]} #/${colorvalues[$i]#\#}/g" "$CACHE_DIR"/user/generated/terminal/sequences.txt
-  done
-
-  sed -i "s/\$alpha/$term_alpha/g" "$CACHE_DIR/user/generated/terminal/sequences.txt"
-
-  for file in /dev/pts/*; do
-    if [[ $file =~ ^/dev/pts/[0-9]+$ ]]; then
-      cat "$CACHE_DIR"/user/generated/terminal/sequences.txt >"$file"
+    if [ ! -f "$STATE_DIR/scss/_material.scss" ]; then
+        echo "Error: _material.scss not generated. GTK Theme update failed."
+        return 1
     fi
-  done
+
+    # Extract color names and values from _material.scss (from applycolor.sh)
+    colornames=$(cat "$STATE_DIR/scss/_material.scss" | cut -d: -f1)
+    colorstrings=$(cat "$STATE_DIR/scss/_material.scss" | cut -d: -f2 | cut -d ' ' -f2 | cut -d ";" -f1)
+    IFS=$'\n'
+    colorlist=($colornames)     # Array of color names
+    colorvalues=($colorstrings) # Array of color values
+
+
+    # --- Apply GTK Function (from applycolor.sh, adapted) ---
+    apply_gtk_internal() { # Renamed to avoid conflict if you still have original applycolor.sh sourced
+        # Copy template
+        mkdir -p "$CACHE_DIR"/user/generated/gradience
+        cp "$CONFIG_DIR/scripts/templates/gradience/preset.json" "$CACHE_DIR"/user/generated/gradience/preset.json
+
+        # Apply colors
+        for i in "${!colorlist[@]}"; do
+            sed -i "s/{{ ${colorlist[$i]} }}/${colorvalues[$i]}/g" "$CACHE_DIR"/user/generated/gradience/preset.json
+        done
+
+        if ! /usr/bin/gradience-cli apply -p "$CACHE_DIR"/user/generated/gradience/preset.json --gtk both; then
+            echo "Error: gradience-cli apply failed."
+            return 1 # Indicate failure
+        fi
+
+        # And set GTK theme manually as Gradience defaults to light adw-gtk3
+        gsettings set org.gnome.desktop.interface gtk-theme adw-gtk3-dark
+    }
+    # --- End of Apply GTK Function ---
+
+    if apply_gtk_internal; then # Call the internal GTK apply function
+        echo "GTK theme colors applied using Gradience."
+        return 0 # Indicate success
+    else
+        echo "Error: GTK theme color application failed."
+        return 1 # Indicate failure
+    fi
 }
 
-apply_hyprland() {
-    rm "$CONFIG_DIR/hyprland/colors.conf"
+update_hyprland_theme() {
+    # Apply Hyprland
     cp "$CONFIG_DIR/scripts/templates/hypr/colors.conf" "$CONFIG_DIR/hyprland/"
-     
-  # Apply colors
-  for i in "${!colorlist[@]}"; do
-      sed -i "s/{{ ${colorlist[$i]} }}/${colorvalues[$i]#\#}/g" "$CONFIG_DIR"/hyprland/colors.conf
-      done
-}
-#
-# apply_hyprlock() {
-#   # Check if scripts/templates/hypr/hyprlock.conf exists
-#   if [ ! -f "scripts/templates/hypr/hyprlock.conf" ]; then
-#     echo "Template file not found for hyprlock. Skipping that."
-#     return
-#   fi
-#   # Copy template
-#   mkdir -p "$CACHE_DIR"/user/generated/hypr/
-#   cp "scripts/templates/hypr/hyprlock.conf" "$CACHE_DIR"/user/generated/hypr/hyprlock.conf
-#   # Apply colors
-#   # sed -i "s/{{ SWWW_WALL }}/${wallpath_png}/g" "$CACHE_DIR"/user/generated/hypr/hyprlock.conf
-#   for i in "${!colorlist[@]}"; do
-#     sed -i "s/{{ ${colorlist[$i]} }}/${colorvalues[$i]#\#}/g" "$CACHE_DIR"/user/generated/hypr/hyprlock.conf
-#   done
-#
-#   cp "$CACHE_DIR"/user/generated/hypr/hyprlock.conf "$XDG_CONFIG_HOME"/hypr/hyprlock.conf
-# }
 
-apply_lightdark() {
-    gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
+    for i in "${!colorlist[@]}"; do
+        sed -i "s/{{ ${colorlist[$i]} }}/${colorvalues[$i]#\#}/g" "$CONFIG_DIR"/hyprland/colors.conf
+        done
 }
 
-apply_gtk() { # Using gradience-cli
-  # Copy template
-  mkdir -p "$CACHE_DIR"/user/generated/gradience
-  cp "scripts/templates/gradience/preset.json" "$CACHE_DIR"/user/generated/gradience/preset.json
+update_dunst_theme() {
+    # Apply Hyprland
+    cp "$CONFIG_DIR/scripts/templates/dunst/dunstrc" "$XDG_CONFIG_HOME/dunst/"
 
-  # Apply colors
-  for i in "${!colorlist[@]}"; do
-    sed -i "s/{{ ${colorlist[$i]} }}/${colorvalues[$i]}/g" "$CACHE_DIR"/user/generated/gradience/preset.json
-  done
+  dunst_config_template="$CONFIG_DIR/scripts/templates/dunst/dunstrc" # Path to template dunst.conf
+  dunst_config_target="$XDG_CONFIG_HOME/dunst/dunstrc"        # Path to user dunst.conf
 
-  mkdir -p "$XDG_CONFIG_HOME/presets" # create gradience presets folder
-  source ../venv/bin/activate
-  gradience-cli apply -p "$CACHE_DIR"/user/generated/gradience/preset.json --gtk both
-  deactivate
-
-  # And set GTK theme manually as Gradience defaults to light adw-gtk3
-  # (which is unreadable when broken when you use dark mode)
-  lightdark=$(get_light_dark)
-  if [ "$lightdark" = "light" ]; then
-    gsettings set org.gnome.desktop.interface gtk-theme 'adw-gtk3'
-  else
-    gsettings set org.gnome.desktop.interface gtk-theme adw-gtk3-dark
+  # Check if dunst.conf template exists
+  if [ ! -f "$dunst_config_template" ]; then
+    echo "Template file not found for Dunst. Skipping Dunst theming."
+    return
   fi
+
+  # Create dunst config directory if it doesn't exist
+  mkdir -p "$XDG_CONFIG_HOME/dunst"
+
+  # Copy template to user config directory
+  cp "$dunst_config_template" "$dunst_config_target"
+
+  for i in "${!colorlist[@]}"; do
+      sed -i "s/{{ ${colorlist[$i]} }}/${colorvalues[$i]#\#}/g" "$XDG_CONFIG_HOME"/dunst/dunstrc
+      done
+
+  killall dunst
+  dunst &
+
+  echo "Dunst colors applied."
 }
 
-# apply_qt() {
-#   sh "$CONFIG_DIR/scripts/kvantum/materialQT.sh"          # generate kvantum theme
-#   python "$CONFIG_DIR/scripts/kvantum/changeAdwColors.py" # apply config colors
-# }
 
-colornames=$(cat $STATE_DIR/scss/_material.scss | cut -d: -f1)
-colorstrings=$(cat $STATE_DIR/scss/_material.scss | cut -d: -f2 | cut -d ' ' -f2 | cut -d ";" -f1)
-IFS=$'\n'
-colorlist=($colornames)     # Array of color names
-colorvalues=($colorstrings) # Array of color values
-
-echo "$STATE_DIR/scss/_material.scss"
-
-
-apply_hyprland &
-# apply_hyprlock &
-apply_lightdark &
-# apply_gtk &
-apply_qt &
-apply_fuzzel &
-apply_term &
+update_gtk_theme "$1"
+update_hyprland_theme "$1" 
+update_dunst_theme "$1" 

@@ -7,3 +7,4 @@ ln -s ~/dotfiles/swaync ~/.config/swaync
 ln -s ~/dotfiles/kitty ~/.config/kitty
 ln -s ~/dotfiles/alacritty ~/.config/alacritty
 ln -s ~/dotfiles/.zshrc ~/.zshrc
+ln -s ~/dotfiles/dunst ~/.config/dunst

@@ -12,7 +12,6 @@ mkdir -p "$CONFIG_DIR"
 mkdir -p "$CACHE_DIR"
 mkdir -p "$STATE_DIR"
 mkdir -p "$CONFIG_DIR/scripts/color_generation" # Ensure subdirectories too, if needed
-mkdir -p "$CONFIG_DIR/scripts/templates/gradience"
 
 # check if no arguments
 if [ $# -eq 0 ]; then
@@ -34,7 +33,6 @@ elif [[ $(wc -l < $colormodefile) -ne 4 || $(wc -w < $colormodefile) -ne 4 ]]; t
     echo "dark" > $colormodefile
     echo "opaque" >> $colormodefile
     echo "vibrant" >> $colormodefile
-    echo "yesgradience" >> $colormodefile
 else
     lightdark=$(sed -n '1p' $colormodefile)
     transparency=$(sed -n '2p' $colormodefile)
@@ -61,22 +59,16 @@ elif [ "$backend" = "material" ]; then
     if [ "$3" = "--smart" ]; then
         smartflag='--smart'
     fi
-    source ../venv/bin/activate
     python color_generation/generate_colors_material.py --path "$(eval echo $1)" \
     --mode "$lightdark" --scheme "$materialscheme" --transparency "$transparency" \
     --cache "$STATE_DIR/user/color.txt" $smartflag \
     > "$CACHE_DIR"/user/generated/material_colors.scss
-    deactivate
     if [ "$2" = "--apply" ]; then
         cp "$CACHE_DIR"/user/generated/material_colors.scss "$STATE_DIR/scss/_material.scss"
-        # color_generation/applycolor.sh
     fi
 elif [ "$backend" = "pywal" ]; then
-    # clear and generate
-    source ../venv/bin/activate
     wal -c
     wal -i "$1" -n $lightdark -q
-    deactivate
     # copy scss
     cp "$XDG_CACHE_HOME/wal/colors.scss" "$CACHE_DIR"/user/generated/material_colors.scss
 
