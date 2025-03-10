@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 ln -s ~/dotfiles/eww ~/.config/eww
 ln -s ~/dotfiles/hypr ~/.config/hypr
 ln -s ~/dotfiles/cava ~/.config/cava
