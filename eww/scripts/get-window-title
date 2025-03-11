@@ -1,16 +1,23 @@
 #!/bin/sh
+
 hyprctl activewindow -j | jq --raw-output .title | awk '{
-    if (length($0) > 40) 
-        print substr($0, 1, 37) "…"; 
-    else 
-        print $0;
+    if ($0 == "null") {
+        print ""
+    } else if (length($0) > 40) {
+        print substr($0, 1, 37) "…"
+    } else {
+        print $0
+    }
 }'
 
 socat -u UNIX-CONNECT:$XDG_RUNTIME_DIR/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock - | stdbuf -o0 awk -F '>>|,' '/^activewindow>>/{
     gsub(/^ /, "", $3);
-    if (length($3) > 40) 
-        print substr($3, 1, 37) "…"; 
-    else 
-        print $3;
+    if ($3 == "null") {
+        print ""
+    } else if (length($3) > 40) {
+        print substr($3, 1, 37) "…"
+    } else {
+        print $3
+    }
     fflush();
 }'
