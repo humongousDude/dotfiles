@@ -69,6 +69,21 @@ update_hyprland_theme() {
         done
 }
 
+update_hyprlock_theme() {
+    local imgpath="$1" #ensure the variable is local to the function.
+    cp "$CONFIG_DIR/scripts/templates/hypr/hyprlock.conf" "$CONFIG_DIR"/
+
+    # Escape special characters in imgpath
+    escaped_imgpath=$(printf '%s\n' "$imgpath" | sed 's/[\/&]/\\&/g')
+
+    # Use double quotes to protect the variable and replace the line
+    sed -i "s/{{ SWWW_WALL }}/${escaped_imgpath}/g" "$CONFIG_DIR"/hyprlock.conf
+
+    for i in "${!colorlist[@]}"; do
+        sed -i "s/{{ ${colorlist[$i]} }}/${colorvalues[$i]#\#}/g" "$CONFIG_DIR"/hyprlock.conf
+        done
+}
+
 update_dunst_theme() {
     # Apply Hyprland
     cp "$CONFIG_DIR/scripts/templates/dunst/dunstrc" "$XDG_CONFIG_HOME/dunst/"
@@ -98,7 +113,7 @@ update_dunst_theme() {
   echo "Dunst colors applied."
 }
 
-
 update_gtk_theme "$1"
-update_hyprland_theme "$1" 
+update_hyprland_theme "$1"
+update_hyprlock_theme "$1" 
 update_dunst_theme "$1" 

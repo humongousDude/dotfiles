@@ -4,7 +4,7 @@
 
 * {
   all: unset;
-  font-family: JetBrains Mono Nerd Font;
+  font-family: JetBrains Mono Nerd Font Mono;
   // Suggestion: Keep $foreground here - it's usually a good general text color.
   color: $foreground;
 }
@@ -73,7 +73,7 @@ scale trough highlight {
 .mic_icon {
   color: $foreground;
   font-size: 20px;
-  margin-left: 5px;
+  margin-left: 10px;
 }
 
 .leftstuff {
