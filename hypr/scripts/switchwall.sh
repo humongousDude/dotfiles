@@ -32,6 +32,8 @@ switch() {
     fi
 
     eww reload
+
+    echo -e "Wallpaper changed to ${imgpath} at ${DATE}" >> "$CONFIG_DIR"/scripts/wall_log.txt
 }
 
 if [ "$1" == "--noswitch" ]; then

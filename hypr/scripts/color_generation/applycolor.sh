@@ -62,11 +62,12 @@ update_gtk_theme() {
 
 update_hyprland_theme() {
     # Apply Hyprland
-    cp "$CONFIG_DIR/scripts/templates/hypr/colors.conf" "$CONFIG_DIR/hyprland/"
+    cp "$CONFIG_DIR/scripts/templates/hypr/colors.conf" "$CONFIG_DIR/scripts/templates/hypr/temp.conf"
 
     for i in "${!colorlist[@]}"; do
-        sed -i "s/{{ ${colorlist[$i]} }}/${colorvalues[$i]#\#}/g" "$CONFIG_DIR"/hyprland/colors.conf
-        done
+        sed -i "s/{{ ${colorlist[$i]} }}/${colorvalues[$i]#\#}/g" "$CONFIG_DIR"/scripts/templates/hypr/temp.conf
+    done
+    cp "$CONFIG_DIR/scripts/templates/hypr/temp.conf" "$CONFIG_DIR/hyprland/colors.conf"
 }
 
 update_hyprlock_theme() {

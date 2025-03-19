@@ -34,6 +34,8 @@ switch() {
     fi
 
     eww reload
+
+    echo -e "Wallpaper changed to ${imgpath} at ${DATE}\n" >> "$CONFIG_DIR"/scripts/wall_log.txt
 }
 
 # Initialize EWW timer variable to "N/A" at script start
