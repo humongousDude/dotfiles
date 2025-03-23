@@ -71,13 +71,13 @@
         "bash ~/.config/eww/scripts/get-player-metadata"
 )
 
-
 (defwidget rightstuff []
     (box :class "rightstuff" :orientation "h" :space-evenly false :halign "end" :hexpand false :spacing 20
         (volume)
         (mic)
         (system_tray)
         (time)
+        (powerbutton)
     )
 )
 
@@ -85,23 +85,32 @@
     (box :class "leftstuff" :orientation "h" :space-evenly false :halign "start" :hexpand false :spacing 10
         (label :text "󰣇" :class "icon")
         (time_until_wallpaper_swap)
-        (active_window)
+        ;; (active_window)
+        (cavabarWidg)
     )
 )
 
+(deflisten cavabar :initial ""
+    "bash ../hypr/scripts/cavabar.sh"
+)
+
+(defwidget cavabarWidg [] 
+    (box :class "cavabar"
+    cavabar)
+)
 
 (defwidget time_until_wallpaper_swap []
     (label :text "${wallpaper_timer_text}" :class "wallpaper_timer")
 )
 
-(deflisten window :initial "..." "sh ~/.config/eww/scripts/get-window-title")
-(defwidget active_window [] 
-  (box
-        :class "active-window"
-    (label :text "${window}"
-    )
-  )
-)
+;; (deflisten window :initial "..." "sh ~/.config/eww/scripts/get-window-title")
+;; (defwidget active_window [] 
+;;   (box
+;;         :class "active-window"
+;;     (label :text "${window}"
+;;     )
+;;   )
+;; )
 
 (defwidget system_tray []
     (box
@@ -115,44 +124,14 @@
     )
 )
 
-; Revealer on hover, using children
-(defwidget revealer-on-hover [revealvar revealvar-name ?class ?duration ?transition]
-  (box
-    :class "${class} revealer-on-hover"
-    :orientation "h"
-    :space-evenly false
-    (eventbox
-      :onhover "eww update ${revealvar-name}=true"
-      :onhoverlost "eww update ${revealvar-name}=false"
-      (box
-        :space-evenly false
-        (children :nth 0)
-        (revealer
-          :reveal revealvar
-          :transition {transition ?: "slideright"}
-          :duration {duration ?: "500ms"}
-          (children :nth 1))))))
 
-(defwidget revealer-on-hover-reversed [revealvar revealvar-name ?class ?duration ?transition]
-  (box
-    :class "${class} revealer-on-hover"
-    :orientation "h"
-    :space-evenly false
-    (eventbox
-      :onhover "eww update ${revealvar-name}=true"
-      :onhoverlost "eww update ${revealvar-name}=false"
-      (box
-        :space-evenly false
-        (revealer
-          :reveal revealvar
-          :transition {transition ?: "slideright"}
-          :duration {duration ?: "500ms"}
-          (children :nth 0))
-        (children :nth 1)
-
-))))
-
-
+(defwidget powerbutton [] 
+    (button
+        :class "powerbutton"
+        :onclick "wlogout &"
+        "⏻"
+    )
+)
 
 (defpoll _time :interval "1s"
   `date +'{"h":"%H", "m":"%M", "s":"%S"}'`)
@@ -225,6 +204,24 @@
         (revealer
           :reveal revealvar
           :transition {transition ?: "slideright"}
-          :duration {duration ?: "500ms"}
+          :duration {duration ?: "300ms"}
           (children :nth 1))))))
 
+(defwidget revealer-on-hover-reversed [revealvar revealvar-name ?class ?duration ?transition]
+  (box
+    :class "${class} revealer-on-hover"
+    :orientation "h"
+    :space-evenly false
+    (eventbox
+      :onhover "eww update ${revealvar-name}=true"
+      :onhoverlost "eww update ${revealvar-name}=false"
+      (box
+        :space-evenly false
+        (revealer
+          :reveal revealvar
+          :transition {transition ?: "slideright"}
+          :duration {duration ?: "300ms"}
+          (children :nth 0))
+        (children :nth 1)
+
+))))

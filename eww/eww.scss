@@ -14,7 +14,7 @@
   // Suggestion: Use $background - it's designed as a base background color from your wallpaper.
   background-color: rgba($background, 0.0);
   /* Keep transparency if you like it */
-  padding-top: 4px;
+  padding-top: 6px;
 }
 
 .bar_class {
@@ -33,11 +33,16 @@
 }
 
 .time {
-  margin-right: 20px;
+  margin-right: 0px;
 }
 
 .volume_class {
   color: $foreground;
+}
+
+.powerbutton {
+  font-size: 20px;
+  margin-right: 14px;
 }
 
 scale trough {
@@ -96,12 +101,21 @@ scale trough highlight {
   border-radius: 12px;
 }
 
+
+.cavabar {
+  background-color: $background;
+  margin-left: 0px;
+  padding-right: 10px;
+  padding-left: 10px;
+  border-radius: 12px;
+}
+
 .wallpaper_timer,
 .active-window {
   background-color: $background;
   margin-left: 0px;
-  padding-right: 8px;
-  padding-left: 8px;
+  padding-right: 10px;
+  padding-left: 10px;
   border-radius: 12px;
 }
 
