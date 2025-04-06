@@ -4,7 +4,7 @@
 
 * {
   all: unset;
-  font-family: JetBrains Mono Nerd Font Mono;
+  font-family: MonaspaceNeon;
   // Suggestion: Keep $foreground here - it's usually a good general text color.
   color: $foreground;
 }
@@ -86,6 +86,9 @@ scale trough highlight {
 }
 
 .leftstuff {
+  color: $foreground;
+  background-color: $background;
+  border-radius: 12px;
   margin-left: 20px;
 }
 
@@ -145,21 +148,11 @@ scale trough highlight {
 
 .workspace-entry {
   padding: 0px 8px;
+  border-radius: 0px;
 
-  &.occupied-right {
+  &.occupied {
     // Suggestion: $color10 (green/teal) for occupied - often a good indicator of "active/in use".
     background-color: rgba($color10, 0.9);
-    border-radius: 0px;
-  }
-
-  &.occupied-center {
-    background-color: rgba($color10, 0.9);
-    border-radius: 0px;
-  }
-
-  &.occupied-left {
-    background-color: rgba($color10, 0.9);
-    border-radius: 0px;
   }
 
   &.occupied label {
@@ -178,12 +171,15 @@ scale trough highlight {
   }
 
   &.current {
-    margin-top: 8px;
-    margin-bottom: 8px;
+    /* margin-top: 8px; */
+    /* margin-bottom: 8px; */
     // Suggestion: $color1 (reddish) for current workspace - red often signifies "active/selected".
-    background-color: $color1;
+    background-color: $color3;
     // Suggestion:  Use $foreground (or $color7) for text on the current workspace background for contrast.
-    color: $foreground;
     /* Or try $color7 */
+  }
+
+  &.current label {
+    color: $foreground;
   }
 }

@@ -1,3 +1,5 @@
+fastfetch
+
 alias kys="shutdown now"
 
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
@@ -13,9 +15,8 @@ fi
 
 # Path to your Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
-export vcpkg_root="~/programs/vcpkg/"
+export vcpkg_root="$HOME/programs/vcpkg/"
 
-export PATH="$PATH:$HOME/bin/LLVM-19.1.5-Linux-X64/bin/"
 export PATH="$PATH:$HOME/programs/vcpkg/"
 export PATH="$PATH:$HOME/.local/bin/"
 
@@ -37,7 +38,7 @@ export XMODIFIERS=@im=fcitx
 # load a random theme each time Oh My Zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="powerlevel10k/powerlevel10k"
+ZSH_THEME="xiong-chiamiov-plus" # set by `omz`
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load

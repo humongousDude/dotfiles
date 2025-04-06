@@ -84,11 +84,28 @@
 (defwidget leftstuff []
     (box :class "leftstuff" :orientation "h" :space-evenly false :halign "start" :hexpand false :spacing 10
         (label :text "󰣇" :class "icon")
-        (time_until_wallpaper_swap)
+        ;; (time_until_wallpaper_swap)
         ;; (active_window)
+        ;; (workspaces)
         (cavabarWidg)
     )
 )
+(deflisten workspaces :initial "[]" "bash ~/.config/eww/scripts/get-workspaces")
+(deflisten current_workspace :initial "1" "bash ~/.config/eww/scripts/get-active-workspace")
+(defwidget workspaces []
+  (eventbox :onscroll "bash ~/.config/eww/scripts/change-active-workspace {} ${current_workspace}" :class "workspaces-widget"
+    (box :space-evenly true
+      (label :text "${workspaces}${current_workspace}" :visible false)
+      (for workspace in workspaces
+        (eventbox :onclick "hyprctl dispatch workspace ${workspace.id}"
+          (box :class "workspace-entry ${workspace.windows > 0 ? "occupied" : "empty"}"
+            (label :text "${workspace.id}" :class "workspace-entry ${workspace.id == current_workspace ? "current" : ""}" )
+            )
+          )
+        )
+      )
+    )
+  )
 
 (deflisten cavabar :initial ""
     "bash ../hypr/scripts/cavabar.sh"
