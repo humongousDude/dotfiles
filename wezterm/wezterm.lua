@@ -5,12 +5,12 @@ local wezterm = require 'wezterm'
 local config = wezterm.config_builder()
 
 -- This is where you actually apply your config choices
-config.window_background_opacity = 0.8
+config.window_background_opacity = 0.7
 config.text_background_opacity = 0.5
 config.enable_tab_bar = false
 config.window_close_confirmation = 'NeverPrompt'
 
-config.font = wezterm.font 'MonaspaceArgon'
+config.font = wezterm.font 'MonaspaceNeon'
 -- for Monaspace
 config.harfbuzz_features = { "ss01", "ss02", "ss03", "ss04", "ss05", "ss06", "ss07", "ss08", "calt", "dlig" }
 
