@@ -41,6 +41,6 @@ if [ "$1" == "--noswitch" ]; then
 elif [[ "$1" ]]; then
     switch "$1"
 else
-    cd "$(xdg-user-dir PICTURES)/humongousdude.github.io/wallpapers/" || cd "$(xdg-user-dir PICTURES)" || exit 1
+    cd "$(xdg-user-dir PICTURES)/Wallpapers/" || cd "$(xdg-user-dir PICTURES)" || exit 1
     switch "$(yad --width 1200 --height 800 --file --add-preview --large-preview --title='Choose a wallpaper')"
 fi

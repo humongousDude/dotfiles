@@ -1,4 +1,4 @@
 require("humongousDude.core")
 require("humongousDude.lazy")
 
-vim.o.guifont = "JetBrainsMono_Nerd_Font_Mono:h10"
+vim.o.guifont = "Monaspace_Neon:h12"

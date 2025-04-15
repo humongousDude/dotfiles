@@ -5,31 +5,26 @@
 * {
   all: unset;
   font-family: MonaspaceNeon;
-  // Suggestion: Keep $foreground here - it's usually a good general text color.
   color: $foreground;
+  text-shadow: 0 0 8px rgba($foreground, 0.7); // Adjust blur (5px) and alpha (0.7) as needed
 }
 
-// Global Styles
 .bar {
-  // Suggestion: Use $background - it's designed as a base background color from your wallpaper.
   background-color: rgba($background, 0.0);
-  /* Keep transparency if you like it */
   padding-top: 6px;
 }
 
 .bar_class {
-  // Suggestion:  Consistent background - use $background again.
   background-color: rgba($background, 0.0);
-  /* Keep transparency */
 }
 
 .sys_tray {
-  // Suggestion:  Slightly different background for system tray to visually separate it.
-  //             Perhaps a slightly lighter shade of the background, or a very subtle accent.
-  //             Let's try $color0 blended with white for a slightly lighter muted background.
-  background-color: rgba(mix($color0, white, 10%), 1.0);
+  /* background-color: rgba(mix($color0, white, 10%), 1.0); */
+
   /* Subtle lighter background */
   color: $foreground;
+
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.7); // Adjust blur (5px) and alpha (0.7) as needed
 }
 
 .time {
@@ -47,8 +42,6 @@
 
 scale trough {
   all: unset;
-  // Suggestion:  $color3 is already used - if you like it, keep it! It's often a good accent.
-  //             Alternatively, try another accent like $color2 (greenish/teal) or $color4 (blueish).
   background-color: $color4;
   border-radius: 50px;
   min-height: 10px;
@@ -60,8 +53,6 @@ scale trough {
 scale trough highlight {
   all: unset;
   border-radius: 12px;
-  // Suggestion: $color5 is also used - magenta/purple. If you like the contrast with $color3, keep it.
-  //             For a different highlight, try $color6 (cyan/light blue), or a brighter version of $color3 like $color11.
   background-color: $color6;
 }
 
@@ -93,10 +84,7 @@ scale trough highlight {
 }
 
 .icon {
-  // Suggestion: Instead of hardcoded #1793d0 (blue), use a Pywal accent color.
-  //             Let's try $color4 (often a blueish accent) or $color2 (greenish).
   color: $color2;
-  /* Or try $color2, $color6, etc. for icons */
   background-color: $background;
   font-size: 20px;
   padding-right: 10px;
@@ -137,46 +125,44 @@ scale trough highlight {
   margin-right: 20px;
 }
 
-// unused, cba to add workspaces lol
-
 .workspaces-widget {
-  // Suggestion: Darker background for workspace widget to make it stand out slightly.
-  //             Use a darker shade of $background, like $color0 itself or even $color8 (darker variant).
   background-color: rgba($color0, 1.0);
-  /* Or try rgba($color8, 1.0) for even darker */
 }
 
 .workspace-entry {
-  padding: 0px 8px;
-  border-radius: 0px;
+  padding: 0px 3px;
+  border-radius: 12px;
+  color: $foreground;
+  background-color: transparent;
+  border: 2px solid transparent;
+  margin-right: 2px;
+  margin-left: 2px;
+
+  transition: border-color 0.3s ease, color 0.3s ease, margin 0.3s ease, box-shadow 0.3s ease;
 
   &.occupied {
-    // Suggestion: $color10 (green/teal) for occupied - often a good indicator of "active/in use".
-    background-color: rgba($color10, 0.9);
-  }
-
-  &.occupied label {
-    color: $foreground;
+    border-color: $color10;
+    box-shadow: 0 0 4px 2px rgba($color10, 0.6);
   }
 
   &.empty {
-    // Suggestion:  $color3 (yellow/gold) for empty - often associated with "warning" or "attention" subtly.
-    //             Alternatively, you could use a muted shade of your foreground like rgba($foreground, 0.5)
-    background-color: rgba($color3, 0.2);
+    /* box-shadow: 0 0 7px 1px rgba($color3, 0.6); // Adjust blur, spread, and alpha as needed */
   }
 
   &.empty label {
-    // Suggestion: Lighter shade of foreground for empty workspace text.
-    color: rgba($foreground, 0.7);
+    color: rgba($foreground, 0.4);
   }
 
   &.current {
-    /* margin-top: 8px; */
-    /* margin-bottom: 8px; */
-    // Suggestion: $color1 (reddish) for current workspace - red often signifies "active/selected".
-    background-color: $color3;
-    // Suggestion:  Use $foreground (or $color7) for text on the current workspace background for contrast.
-    /* Or try $color7 */
+    margin-top: 2px;
+    margin-bottom: 2px;
+
+    border-radius: 50%;
+    border-color: $color1;
+    border-width: 3px;
+
+
+    box-shadow: 0 0 8px 2px rgba($color1, 0.7);
   }
 
   &.current label {

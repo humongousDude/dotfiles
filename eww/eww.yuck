@@ -18,11 +18,11 @@
   :vexpand false
   :geometry (geometry
                       :width "100%"
-                      :height "3%"
+                      :height "0%"
                       :anchor "top center")
   :exclusive true
   :space-evenly false
-  
+
   (bar)
 )
 
@@ -57,7 +57,7 @@
 )
 
 (defwidget music []
-    (box 
+    (box
         :class "music"
         :orientation "h"
         :space-evenly false
@@ -86,7 +86,7 @@
         (label :text "󰣇" :class "icon")
         ;; (time_until_wallpaper_swap)
         ;; (active_window)
-        ;; (workspaces)
+        (workspaces)
         (cavabarWidg)
     )
 )
@@ -94,24 +94,24 @@
 (deflisten current_workspace :initial "1" "bash ~/.config/eww/scripts/get-active-workspace")
 (defwidget workspaces []
   (eventbox :onscroll "bash ~/.config/eww/scripts/change-active-workspace {} ${current_workspace}" :class "workspaces-widget"
-    (box :space-evenly true
-      (label :text "${workspaces}${current_workspace}" :visible false)
+    (box :space-evenly true :spacing 0 :hexpand true
+      (label :text "${workspaces}${current_workspace}" :visible false )
       (for workspace in workspaces
         (eventbox :onclick "hyprctl dispatch workspace ${workspace.id}"
           (box :class "workspace-entry ${workspace.windows > 0 ? "occupied" : "empty"}"
             (label :text "${workspace.id}" :class "workspace-entry ${workspace.id == current_workspace ? "current" : ""}" )
-            )
           )
         )
       )
     )
   )
+)
 
 (deflisten cavabar :initial ""
     "bash ../hypr/scripts/cavabar.sh"
 )
 
-(defwidget cavabarWidg [] 
+(defwidget cavabarWidg []
     (box :class "cavabar"
     cavabar)
 )
@@ -121,7 +121,7 @@
 )
 
 ;; (deflisten window :initial "..." "sh ~/.config/eww/scripts/get-window-title")
-;; (defwidget active_window [] 
+;; (defwidget active_window []
 ;;   (box
 ;;         :class "active-window"
 ;;     (label :text "${window}"
@@ -135,6 +135,7 @@
         ;;     :onclick "${tray_visible ? "eww update tray_visible=false" : "eww update tray_visible=true"}; ./scripts/open-tray ${tray_visible ? 1 : 0}"
         ;;     ""
         ;; )
+        :class "sys_tray"
         (systray :space-evenly true :spacing 12 :prepend-new true :icon-size 18
                 :visible "${tray_visible ? "true" : "false"}"
         )
@@ -142,7 +143,7 @@
 )
 
 
-(defwidget powerbutton [] 
+(defwidget powerbutton []
     (button
         :class "powerbutton"
         :onclick "wlogout &"
@@ -153,7 +154,7 @@
 (defpoll _time :interval "1s"
   `date +'{"h":"%H", "m":"%M", "s":"%S"}'`)
 
-(defwidget time [] 
+(defwidget time []
     (label :text "${_time.h}:${_time.m}:${_time.s}"
             :halign "center"
             :hexpand false
@@ -170,7 +171,7 @@
 
         (box
             :space-evenly false
-            (scale    
+            (scale
                 :class "volbar"
 			    :value volume_percent
 			    :orientation "h"
@@ -191,7 +192,7 @@
         :transition "slideleft"
         (box
             :space-evenly false
-            (scale    
+            (scale
                 :class "micbar"
 			    :value mic_percent
 			    :orientation "h"
@@ -202,7 +203,6 @@
 		    )
 	    )
 	    (button   :onclick ""   :class "mic_icon" " ${mic_percent}%")
-
     )
 )
 

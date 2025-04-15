@@ -11,7 +11,7 @@ STATE_DIR="$XDG_STATE_HOME/wallpaper-theming"    # Custom state directory
 INTERVAL=${1:-15}
 
 # Set the wallpaper directory
-WALLPAPER_DIR="$(xdg-user-dir PICTURES)/humongousdude.github.io/wallpapers/"
+WALLPAPER_DIR="$(xdg-user-dir PICTURES)/Wallpapers/"
 [ -d "$WALLPAPER_DIR" ] || WALLPAPER_DIR="$(xdg-user-dir PICTURES)"
 
 # Function to switch wallpaper
