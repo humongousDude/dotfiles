@@ -114,7 +114,37 @@ update_dunst_theme() {
   echo "Dunst colors applied."
 }
 
+update_fnott_theme() {
+    # Apply Hyprland
+    cp "$CONFIG_DIR/scripts/templates/fnott/fnott.ini" "$XDG_CONFIG_HOME/fnott/"
+
+  fnott_config_template="$CONFIG_DIR/scripts/templates/fnott/fnott.ini" # Path to template fnott.conf
+  fnott_config_target="$XDG_CONFIG_HOME/fnott/fnott.ini"        # Path to user fnott.conf
+
+  # Check if fnott.conf template exists
+  if [ ! -f "$fnott_config_template" ]; then
+    echo "Template file not found for Fnott. Skipping Fnott theming."
+    return
+  fi
+
+  # Create fnott config directory if it doesn't exist
+  mkdir -p "$XDG_CONFIG_HOME/fnott"
+
+  # Copy template to user config directory
+  cp "$fnott_config_template" "$fnott_config_target"
+
+  for i in "${!colorlist[@]}"; do
+      sed -i "s/{{ ${colorlist[$i]} }}/${colorvalues[$i]#\#}/g" "$XDG_CONFIG_HOME"/fnott/fnott.ini
+      done
+
+  killall fnott
+  fnott &
+
+  echo "Fnott colors applied."
+}
+
 update_gtk_theme "$1"
 update_hyprland_theme "$1"
 update_hyprlock_theme "$1" 
-update_dunst_theme "$1" 
+# update_dunst_theme "$1" 
+update_fnott_theme "$1"

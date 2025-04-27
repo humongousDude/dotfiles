@@ -1,5 +1,5 @@
 configuration {
-    font: "JetBrainsMono Nerd Font 12";
+    font: "MonaspaceNeon 12";
 	location: 0;
 	yoffset: 0;
 	xoffset: 0;
@@ -7,7 +7,7 @@ configuration {
     fixed-num-lines: false;
     display-drun: "";
     display-run: "";
-    display-window: "Windows: ";
+    display-window: "";
     show-icons: true;
 	drun-display-format: "{icon} {name} [<span weight='light' size='small'><i>({generic})</i></span>]";
 }

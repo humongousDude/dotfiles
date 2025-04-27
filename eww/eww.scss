@@ -6,7 +6,8 @@
   all: unset;
   font-family: MonaspaceNeon;
   color: $foreground;
-  text-shadow: 0 0 8px rgba($foreground, 0.7); // Adjust blur (5px) and alpha (0.7) as needed
+  text-shadow: 0 0 4px rgba($foreground, 0.7); // Adjust blur (5px) and alpha (0.7) as needed
+
 }
 
 .bar {
@@ -19,9 +20,6 @@
 }
 
 .sys_tray {
-  /* background-color: rgba(mix($color0, white, 10%), 1.0); */
-
-  /* Subtle lighter background */
   color: $foreground;
 
   text-shadow: 0 0 5px rgba(255, 255, 255, 0.7); // Adjust blur (5px) and alpha (0.7) as needed
@@ -99,6 +97,10 @@ scale trough highlight {
   padding-right: 10px;
   padding-left: 10px;
   border-radius: 12px;
+
+  /* text-shadow: 0 0 2px rgba($foreground, 0.7); // Adjust blur (5px) and alpha (0.7) as needed */
+
+  text-shadow: none;
 }
 
 .wallpaper_timer,
@@ -133,8 +135,10 @@ scale trough highlight {
   padding: 0px 3px;
   border-radius: 12px;
   color: $foreground;
+
   background-color: transparent;
   border: 2px solid transparent;
+
   margin-right: 2px;
   margin-left: 2px;
 
@@ -142,7 +146,7 @@ scale trough highlight {
 
   &.occupied {
     border-color: $color10;
-    box-shadow: 0 0 4px 2px rgba($color10, 0.6);
+    /* box-shadow: 0 0 0px 2px rgba($color10, 0.6); */
   }
 
   &.empty {
@@ -162,7 +166,7 @@ scale trough highlight {
     border-width: 3px;
 
 
-    box-shadow: 0 0 8px 2px rgba($color1, 0.7);
+    box-shadow: 0 0 6px 2px rgba($color1, 0.7);
   }
 
   &.current label {
