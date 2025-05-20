@@ -20,7 +20,7 @@ switch() {
 
     swww img "$imgpath" --transition-step 100 --transition-fps 120 \
         --transition-type grow --transition-angle 30 --transition-duration 1 \
-        --transition-pos "$cursorposx, $cursorposy_inverted"
+        --transition-pos "0,0"
 
     wal -i "$imgpath"
     pywalfox update
