@@ -1,21 +1,16 @@
--- --
--- -- return {
--- -- "catppuccin/nvim",
--- -- name = "catpuccin",
--- -- priority = 1000,
--- -- config = function ()
--- --      vim.cmd "colorscheme catppuccin-mocha"
--- -- end
--- -- }
 return {
     "ellisonleao/gruvbox.nvim",
+    dependencies = {
+        "catppuccin/nvim",
+        "bluz71/vim-moonfly-colors"
+    },
     opts = {
     },
     name = "gruvbox",
     priority = 1000,
     config = function()
         gruvbox_transparent_bg = 1
-        require("gruvbox").setup({transparent_mode=true})
+        require("gruvbox").setup({ transparent_mode = true })
         vim.cmd "colorscheme gruvbox"
     end
 }

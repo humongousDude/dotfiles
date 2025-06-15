@@ -23,7 +23,6 @@ autoload -U compinit && compinit
 autoload -U colors && colors
 autoload -U tetris # main attraction of zsh, obviously
 
-
 # cmp opts
 zstyle ':completion:*' menu select # tab opens cmp menu
 zstyle ':completion:*' special-dirs true # force . and .. to show in cmp menu
@@ -72,7 +71,7 @@ eval "$(zoxide init zsh)"
 
 # autosuggestions
 # requires zsh-autosuggestions
-source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+# source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 # syntax highlighting
 # requires zsh-syntax-highlighting package
