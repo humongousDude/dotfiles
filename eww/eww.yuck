@@ -1,6 +1,6 @@
 (defvar vol_reveal false)
-(defpoll volume_percent :initial 100 :interval "0.1s" "amixer -D pulse sget Master | grep 'Left:' | awk -F'[][]' '{ print $2 }' | tr -d '%'" )
-(defpoll mic_percent :inital 100 :interval "0.1s" "amixer -D pulse sget Capture | grep 'Left:' | awk -F'[][]' '{ print $2 }' | tr -d '%'" )
+(defpoll volume_percent :initial 100 :interval "0.1s" "wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{print $2 * 100}'" )
+(defpoll mic_percent :inital 100 :interval "wpctl get-volume @DEFAULT_AUDIO_SOURCE@ | awk '{print int($2 * 100 + 0.5)}'" )
 (defvar mic_reveal false)
 (defvar music_reveal false)
 (defvar wifi_reveal false)
@@ -62,6 +62,7 @@
         :orientation "h"
         :space-evenly false
         :halign "center"
+        :visible  "${music == "" ? "false" : "true"}"
 
         {music != "" ? "${music}" : ""}
     )
@@ -178,7 +179,7 @@
 			    :tooltip "${volume_percent}%"
 			    :max 101
 			    :min 0
-                :onchange "amixer -D pulse sset Master {}%"
+                :onchange "wpctl set-volume @DEFAULT_AUDIO_SINK@ {}%"
 		    )
 	    )
 	    (button :onclick "" :class "volume_icon" " ${volume_percent}%")
@@ -199,7 +200,7 @@
 			    :tooltip "${mic_percent}%"
 			    :max 101
 			    :min 0
-                :onchange "amixer -D pulse sset Capture {}%"
+                :onchange "wpctl set-volume @DEFAULT_AUDIO_SOURCE@ {}%"
 		    )
 	    )
 	    (button   :onclick ""   :class "mic_icon" " ${mic_percent}%")

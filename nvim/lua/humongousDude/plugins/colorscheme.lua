@@ -2,7 +2,8 @@ return {
     "ellisonleao/gruvbox.nvim",
     dependencies = {
         "catppuccin/nvim",
-        "bluz71/vim-moonfly-colors"
+        "bluz71/vim-moonfly-colors",
+        "folke/tokyonight.nvim"
     },
     opts = {
     },
