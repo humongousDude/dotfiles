@@ -1,6 +1,6 @@
 (defvar vol_reveal false)
 (defpoll volume_percent :initial 100 :interval "0.1s" "wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{print $2 * 100}'" )
-(defpoll mic_percent :inital 100 :interval "wpctl get-volume @DEFAULT_AUDIO_SOURCE@ | awk '{print int($2 * 100 + 0.5)}'" )
+(defpoll mic_percent :inital 100 :interval "0.1s" "wpctl get-volume @DEFAULT_AUDIO_SOURCE@ | awk '{print int($2 * 100 + 0.5)}'" )
 (defvar mic_reveal false)
 (defvar music_reveal false)
 (defvar wifi_reveal false)
@@ -68,7 +68,7 @@
     )
 )
 
-(deflisten music :initial ""
+(deflisten music :initial "" :interval "1s"
         "bash ~/.config/eww/scripts/get-player-metadata"
 )
 

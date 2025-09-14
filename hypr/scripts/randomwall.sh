@@ -20,8 +20,8 @@ switch() {
 
     [ -z "$imgpath" ] && echo "No image found, aborting." && exit 1
 
-    swww img "$imgpath" --transition-step 100 --transition-fps 120 \
-        --transition-type grow --transition-angle 30 --transition-duration 1 \
+    swww img "$imgpath" --transition-step 200 --transition-fps 120 \
+        --transition-type any --transition-duration 1 \
         --transition-pos "960, 540"
 
     wal -i "$imgpath"

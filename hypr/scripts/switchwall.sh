@@ -18,9 +18,9 @@ switch() {
 
     [ -z "$imgpath" ] && echo 'Aborted' && exit 0
 
-    swww img "$imgpath" --transition-step 100 --transition-fps 120 \
-        --transition-type grow --transition-angle 30 --transition-duration 1 \
-        --transition-pos "0,0"
+    swww img "$imgpath" --transition-step 200 --transition-fps 120 \
+        --transition-type any --transition-duration 3\
+        --transition-pos "960, 540"
 
     wal -i "$imgpath"
     pywalfox update
