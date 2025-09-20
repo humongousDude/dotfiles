@@ -12,3 +12,4 @@ ln -s ~/dotfiles/.zshrc ~/.zshrc
 ln -s ~/dotfiles/.zprofile ~/.zprofile
 ln -s ~/dotfiles/dunst ~/.config/dunst
 ln -s ~/dotfiles/wezterm ~/.config/wezterm
+ln -s ~/dotfiles/ghostty ~/.config/ghostty
