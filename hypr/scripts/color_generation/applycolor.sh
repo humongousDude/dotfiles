@@ -14,7 +14,6 @@ update_gtk_theme() {
     mkdir -p "$XDG_CONFIG_HOME/presets" # for gradience
 
     # Generate colors using colorgen.sh with pywal backend
-    echo "IMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA $1"
     "$CONFIG_DIR"/scripts/color_generation/colorgen.sh "$1" --apply  # Pass wallpaper path and --apply
 
     if [ ! -f "$STATE_DIR/scss/_material.scss" ]; then

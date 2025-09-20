@@ -12,7 +12,12 @@ return {
     config = function()
         gruvbox_transparent_bg = 1
         require("gruvbox").setup({ transparent_mode = true })
-        vim.cmd "colorscheme gruvbox"
+        require("tokyonight").setup({
+            style = "night",
+            transparent = true,
+            terminal_colors = true,
+        })
+        vim.cmd "colorscheme tokyonight"
     end
 }
 -- return

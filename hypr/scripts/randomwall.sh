@@ -33,6 +33,7 @@ switch() {
         echo "Warning: GTK Theme color update failed (AGS/Gradience method). Check errors above."
     fi
 
+    sleep 1;
     eww reload
 
     echo -e "Wallpaper changed to ${imgpath} at $(date)" >> "$CONFIG_DIR"/scripts/wall_log.txt
