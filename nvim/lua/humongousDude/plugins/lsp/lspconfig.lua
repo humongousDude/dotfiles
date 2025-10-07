@@ -10,9 +10,7 @@ return {
         local lspconfig = require("lspconfig")
         local cmp_nvim_lsp = require("cmp_nvim_lsp")
 
-        -- IMPORTANT: make sure to setup neodev BEFORE lspconfig
         require("neodev").setup({
-            -- add any options here, or leave empty to use the default settings
         })
 
         local signs = { Error = "󰅚 ", Warn = "󰀪 ", Hint = "󰌶 ", Info = " " }
@@ -27,23 +25,28 @@ return {
         vim.keymap.set("n", "<leader>dd", vim.diagnostic.open_float)
 
         local opts = { noremap = true, silent = true }
-        local on_attach = function(client, bufnr, sig)
+        local on_attach = function(client, bufnr, sig) 
+
+            if client.server_capabilities.inlayHintProvider then
+                vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+            end
+
             vim.api.nvim_create_autocmd("CursorHold", {
                 buffer = bufnr,
                 callback = function()
-                    local opts = {
+                    local float_opts = {
                         focusable = false,
                         close_events = { "BufLeave", "InsertEnter", "FocusLost" },
-                        border = 'rounded',
-                        source = 'always',
-                        prefix = ' ',
-                        scope = 'cursor',
+                        border = "rounded",
+                        source = "always",
+                        prefix = " ",
+                        scope = "cursor",
                     }
-
-                    vim.diagnostic.open_float(nil, opts)
-                    require "lsp_signature".on_attach(signature_setup, bufnr)
-                end
+                    vim.diagnostic.open_float(nil, float_opts)
+                end,
             })
+        
+
 
             opts.buffer = bufnr
             local keymap = vim.keymap

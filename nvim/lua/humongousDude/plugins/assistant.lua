@@ -1,6 +1,12 @@
+-- return {
+--     "supermaven-inc/supermaven-nvim",
+--     config = function()
+--         require("supermaven-nvim").setup({})
+--     end,
+-- }
 return {
-    "supermaven-inc/supermaven-nvim",
+    "github/copilot.vim",
     config = function()
-        require("supermaven-nvim").setup({})
+        -- require("copilot").setup()
     end,
 }
