@@ -26,28 +26,28 @@ update_gtk_theme() {
     colorstrings=$(cat "$STATE_DIR/scss/_material.scss" | cut -d: -f2 | cut -d ' ' -f2 | cut -d ";" -f1)
     IFS=$'\n'
     colorlist=($colornames)     # Array of color names
-    colorvalues=($colorstrings) # Array of color values
+        colorvalues=($colorstrings) # Array of color values
 
 
-    # --- Apply GTK Function (from applycolor.sh, adapted) ---
-    apply_gtk_internal() { # Renamed to avoid conflict if you still have original applycolor.sh sourced
-        # Copy template
-        mkdir -p "$CACHE_DIR"/user/generated/gradience
-        cp "$CONFIG_DIR/scripts/templates/gradience/preset.json" "$CACHE_DIR"/user/generated/gradience/preset.json
+        # --- Apply GTK Function (from applycolor.sh, adapted) ---
+        apply_gtk_internal() { # Renamed to avoid conflict if you still have original applycolor.sh sourced
+            # Copy template
+            mkdir -p "$CACHE_DIR"/user/generated/gradience
+            cp "$CONFIG_DIR/scripts/templates/gradience/preset.json" "$CACHE_DIR"/user/generated/gradience/preset.json
 
-        # Apply colors
-        for i in "${!colorlist[@]}"; do
-            sed -i "s/{{ ${colorlist[$i]} }}/${colorvalues[$i]}/g" "$CACHE_DIR"/user/generated/gradience/preset.json
-        done
+            # Apply colors
+            for i in "${!colorlist[@]}"; do
+                sed -i "s/{{ ${colorlist[$i]} }}/${colorvalues[$i]}/g" "$CACHE_DIR"/user/generated/gradience/preset.json
+            done
 
-        if ! /usr/bin/gradience-cli apply -p "$CACHE_DIR"/user/generated/gradience/preset.json --gtk both; then
-            echo "Error: gradience-cli apply failed."
-            return 1 # Indicate failure
-        fi
+            if ! /usr/bin/gradience-cli apply -p "$CACHE_DIR"/user/generated/gradience/preset.json --gtk both; then
+                echo "Error: gradience-cli apply failed."
+                return 1 # Indicate failure
+            fi
 
-        # And set GTK theme manually as Gradience defaults to light adw-gtk3
-        gsettings set org.gnome.desktop.interface gtk-theme adw-gtk3-dark
-    }
+            # And set GTK theme manually as Gradience defaults to light adw-gtk3
+            gsettings set org.gnome.desktop.interface gtk-theme adw-gtk3-dark
+        }
     # --- End of Apply GTK Function ---
 
     if apply_gtk_internal; then # Call the internal GTK apply function
@@ -65,9 +65,9 @@ update_hyprland_theme() {
 
     for i in "${!colorlist[@]}"; do
         sed -i "s/{{ ${colorlist[$i]} }}/${colorvalues[$i]#\#}/g" "$CONFIG_DIR"/scripts/templates/hypr/temp.conf
-    done
-    cp "$CONFIG_DIR/scripts/templates/hypr/temp.conf" "$CONFIG_DIR/hyprland/colors.conf"
-}
+        done
+        cp "$CONFIG_DIR/scripts/templates/hypr/temp.conf" "$CONFIG_DIR/hyprland/colors.conf"
+    }
 
 update_hyprlock_theme() {
     local imgpath="$1" #ensure the variable is local to the function.
@@ -82,68 +82,98 @@ update_hyprlock_theme() {
     for i in "${!colorlist[@]}"; do
         sed -i "s/{{ ${colorlist[$i]} }}/${colorvalues[$i]#\#}/g" "$CONFIG_DIR"/hyprlock.conf
         done
-}
+    }
 
 update_dunst_theme() {
     # Apply Hyprland
     cp "$CONFIG_DIR/scripts/templates/dunst/dunstrc" "$XDG_CONFIG_HOME/dunst/"
 
-  dunst_config_template="$CONFIG_DIR/scripts/templates/dunst/dunstrc" # Path to template dunst.conf
-  dunst_config_target="$XDG_CONFIG_HOME/dunst/dunstrc"        # Path to user dunst.conf
+    dunst_config_template="$CONFIG_DIR/scripts/templates/dunst/dunstrc" # Path to template dunst.conf
+    dunst_config_target="$XDG_CONFIG_HOME/dunst/dunstrc"        # Path to user dunst.conf
 
-  # Check if dunst.conf template exists
-  if [ ! -f "$dunst_config_template" ]; then
-    echo "Template file not found for Dunst. Skipping Dunst theming."
-    return
-  fi
+    # Check if dunst.conf template exists
+    if [ ! -f "$dunst_config_template" ]; then
+        echo "Template file not found for Dunst. Skipping Dunst theming."
+        return
+    fi
 
-  # Create dunst config directory if it doesn't exist
-  mkdir -p "$XDG_CONFIG_HOME/dunst"
+    # Create dunst config directory if it doesn't exist
+    mkdir -p "$XDG_CONFIG_HOME/dunst"
 
-  # Copy template to user config directory
-  cp "$dunst_config_template" "$dunst_config_target"
+    # Copy template to user config directory
+    cp "$dunst_config_template" "$dunst_config_target"
 
-  for i in "${!colorlist[@]}"; do
-      sed -i "s/{{ ${colorlist[$i]} }}/${colorvalues[$i]#\#}/g" "$XDG_CONFIG_HOME"/dunst/dunstrc
-      done
+    for i in "${!colorlist[@]}"; do
+        sed -i "s/{{ ${colorlist[$i]} }}/${colorvalues[$i]#\#}/g" "$XDG_CONFIG_HOME"/dunst/dunstrc
+        done
 
-  killall dunst
-  dunst &
+        killall dunst
+        dunst &
 
-  echo "Dunst colors applied."
-}
+        echo "Dunst colors applied."
+    }
 
 update_fnott_theme() {
     # Apply Hyprland
     cp "$CONFIG_DIR/scripts/templates/fnott/fnott.ini" "$XDG_CONFIG_HOME/fnott/"
 
-  fnott_config_template="$CONFIG_DIR/scripts/templates/fnott/fnott.ini" # Path to template fnott.conf
-  fnott_config_target="$XDG_CONFIG_HOME/fnott/fnott.ini"        # Path to user fnott.conf
+    fnott_config_template="$CONFIG_DIR/scripts/templates/fnott/fnott.ini" # Path to template fnott.conf
+    fnott_config_target="$XDG_CONFIG_HOME/fnott/fnott.ini"        # Path to user fnott.conf
 
-  # Check if fnott.conf template exists
-  if [ ! -f "$fnott_config_template" ]; then
+    # Check if fnott.conf template exists
+    if [ ! -f "$fnott_config_template" ]; then
+        echo "Template file not found for Fnott. Skipping Fnott theming."
+        return
+    fi
+
+    # Create fnott config directory if it doesn't exist
+    mkdir -p "$XDG_CONFIG_HOME/fnott"
+
+    # Copy template to user config directory
+    cp "$fnott_config_template" "$fnott_config_target"
+
+    for i in "${!colorlist[@]}"; do
+        sed -i "s/{{ ${colorlist[$i]} }}/${colorvalues[$i]#\#}/g" "$XDG_CONFIG_HOME"/fnott/fnott.ini
+        done
+
+        killall fnott
+        fnott &
+
+        echo "Fnott colors applied."
+    }
+
+update_rofi_theme() {
+
+# Apply Hyprland
+cp "$CONFIG_DIR/scripts/templates/rofi/current.rasi" "$XDG_CONFIG_HOME/rofi/"
+
+rofi_config_template="$CONFIG_DIR/scripts/templates/rofi/current.rasi" # Path to template rofi.conf
+rofi_config_target="$XDG_CONFIG_HOME/rofi/current.rasi"        # Path to user rofi.conf
+
+# Check if rofi.conf template exists
+if [ ! -f "$rofi_config_template" ]; then
     echo "Template file not found for Fnott. Skipping Fnott theming."
     return
-  fi
+fi
 
-  # Create fnott config directory if it doesn't exist
-  mkdir -p "$XDG_CONFIG_HOME/fnott"
+# Create rofi config directory if it doesn't exist
+mkdir -p "$XDG_CONFIG_HOME/rofi"
 
-  # Copy template to user config directory
-  cp "$fnott_config_template" "$fnott_config_target"
+# Copy template to user config directory
+cp "$rofi_config_template" "$rofi_config_target"
 
-  for i in "${!colorlist[@]}"; do
-      sed -i "s/{{ ${colorlist[$i]} }}/${colorvalues[$i]#\#}/g" "$XDG_CONFIG_HOME"/fnott/fnott.ini
-      done
+for i in "${!colorlist[@]}"; do
+    sed -i "s/{{ ${colorlist[$i]} }}/${colorvalues[$i]#\#}/g" "$XDG_CONFIG_HOME"/rofi/current.rasi
+    done
 
-  killall fnott
-  fnott &
+    killall rofi
 
-  echo "Fnott colors applied."
+    echo "Rofi colors applied."
 }
 
-update_gtk_theme "$1"
-update_hyprland_theme "$1"
-update_hyprlock_theme "$1" 
+update_gtk_theme "$1" 
+update_hyprland_theme "$1" &
+update_hyprlock_theme "$1" &
 # update_dunst_theme "$1" 
-update_fnott_theme "$1"
+update_fnott_theme "$1" &
+update_rofi_theme "$1" &

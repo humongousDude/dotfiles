@@ -1,42 +1,42 @@
 * {
-    background:                  #0E141CCC;
-    background-color:            #0E141C00;
+    background:                  #{{ $surface }}CC;
+    background-color:            #{{ $surface }}00;
 
-    foreground:                  #DDE3EEFF;
+    foreground:                  #{{ $onSurface }}FF;
     normal-foreground:           @foreground;
-    normal-background:           #0E141C00;
+    normal-background:           #{{ $surface }}00;
 
-    bordercolor:                 #8A919EFF;
+    bordercolor:                 #{{ $outline }}FF;
     border-color:                @bordercolor;
 
-    separatorcolor:              #404753FF;
+    separatorcolor:              #{{ $outlineVariant }}FF;
 
     /* Selected states */
-    selected-normal-background:  #A2C9FF33;
-    selected-normal-foreground:  #00315BFF;
+    selected-normal-background:  #{{ $primary }}33;
+    selected-normal-foreground:  #{{ $onPrimary }}FF;
 
-    selected-urgent-background:  #FFB4ABFF;
-    selected-urgent-foreground:  #690005FF;
+    selected-urgent-background:  #{{ $error }}FF;
+    selected-urgent-foreground:  #{{ $onError }}FF;
 
-    selected-active-background:  #BBC5EA66;
-    selected-active-foreground:  #252F4DFF;
+    selected-active-background:  #{{ $secondary }}66;
+    selected-active-foreground:  #{{ $onSecondary }}FF;
 
     /* Urgent */
-    urgent-background:           #0E141C00;
-    urgent-foreground:           #FFB4ABFF;
+    urgent-background:           #{{ $surface }}00;
+    urgent-foreground:           #{{ $error }}FF;
 
     /* Active */
-    active-background:           #0E141C00;
-    active-foreground:           #BBC5EAFF;
+    active-background:           #{{ $surface }}00;
+    active-foreground:           #{{ $secondary }}FF;
 
     /* Alternates */
-    alternate-normal-background: #0E141C00;
+    alternate-normal-background: #{{ $surface }}00;
     alternate-normal-foreground: @foreground;
 
-    alternate-urgent-background: #0E141C00;
+    alternate-urgent-background: #{{ $surface }}00;
     alternate-urgent-foreground: @urgent-foreground;
 
-    alternate-active-background: #0E141C00;
+    alternate-active-background: #{{ $surface }}00;
     alternate-active-foreground: @active-foreground;
 
     spacing: 2;

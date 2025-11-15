@@ -16,7 +16,7 @@ return {
         picker = { enabled = true },
         quickfile = { enabled = true },
         scope = { enabled = true },
-        scroll = { enabled = true },
+        scroll = { enabled = false },
         statuscolumn = { enabled = true },
         words = { enabled = true },
         styles = {
@@ -83,6 +83,9 @@ return {
         { "gy",              function() Snacks.picker.lsp_type_definitions() end,                    desc = "Goto T[y]pe Definition" },
         { "<leader>ss",      function() Snacks.picker.lsp_symbols() end,                             desc = "LSP Symbols" },
         { "<leader>sS",      function() Snacks.picker.lsp_workspace_symbols() end,                   desc = "LSP Workspace Symbols" },
+        { "<leader>ca",      function() Snacks.picker.lsp_code_actions() end,                        desc = "Code Actions" },
+        { "<leader>oc",      function() Snacks.picker.lsp_outgoing_calls() end,                      desc = "Outgoing calls" },
+        { "<leader>ic",      function() Snacks.picker.lsp_incoming_calls() end,                      desc = "Incoming calls" },
         -- Other
         { "<leader>z",       function() Snacks.zen() end,                                            desc = "Toggle Zen Mode" },
         { "<leader>Z",       function() Snacks.zen.zoom() end,                                       desc = "Toggle Zoom" },

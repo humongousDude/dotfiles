@@ -20,10 +20,10 @@ switch() {
 
     swww img "$imgpath" --transition-step 200 --transition-fps 120 \
         --transition-type any --transition-duration 3\
-        --transition-pos "960, 540"
+        --transition-pos "960, 540" &
 
     wal -i "$imgpath"
-    pywalfox update
+    pywalfox update &
 
     if "$CONFIG_DIR"/scripts/color_generation/applycolor.sh "$imgpath"; then # Pass wallpaper path to update_gtk_theme
         echo "GTK Theme colors updated successfully using AGS scripts and Gradience."
@@ -31,7 +31,7 @@ switch() {
         echo "Warning: GTK Theme color update failed (AGS/Gradience method). Check errors above."
     fi
 
-    eww reload
+    eww reload &
 
     echo -e "Wallpaper changed to ${imgpath} at $(date)" >> "$CONFIG_DIR"/scripts/wall_log.txt
 }
